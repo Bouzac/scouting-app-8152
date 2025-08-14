@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulaire d'éclaireur</title>
+</head>
+<body>
+  <h1>Formulaire d'éclaireur</h1>
+  <form action="/scout_form" method="POST">
+    <div id="Page1">
+      <p>Initiales de l'éclaireur</p>
+      <input type="text" id="scoutID" name="scoutID">
+
+      <p>Numéro d'équipe</p>
+      <input type="number" id="team_number" name="team_number">
+
+      <p>Numéro de match</p>
+      <input type="number" id="match_number" name="match_number">
+
+      <a href="#" onclick="return show('Page2','Page1');">Next</a>
+  </div>
+    
+  <div id="Page2" style="display:none">
+
+    <a href="#" onclick="return show('Page1','Page2');">Previous</a>
+    <a href="#" onclick="return show('Page3','Page2');">Next</a>
+  </div>
+
+  <div id="Page3" style="display:none">
+    <button type="submit">Soumettre</button>
+  </div>
+  </form>
+</body>
+<script>
+function show(shown, hidden) {
+  document.getElementById(shown).style.display='block';
+  document.getElementById(hidden).style.display='none';
+  return false;
+}
+</script>
+</html>
