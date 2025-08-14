@@ -1,0 +1,61 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f7fa;
+    color: #333;
+    margin: 0;
+    padding: 2rem;
+}
+
+/* Header */
+h1 {
+    text-align: center;
+    color: #222;
+}
+
+h3 {
+    text-align: center;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+/* Table Styling */
+table {
+    width: 80%;
+    margin: 2rem auto;
+    border-collapse: collapse;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+th, td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+th {
+    background-color: #007704;
+    color: rgba(51, 255, 0, 0.555);
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Optional: Add some spacing around rows */
+.result-row {
+    padding: 5px;
+}
+
+.result-row {
+    text-transform: uppercase;
+}
+
+.search-bar {
+    text-align: center;
+}

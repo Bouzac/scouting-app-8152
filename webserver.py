@@ -12,9 +12,10 @@ def index():
 def hello():
     return render_template('hello.html')
 
-@app.route('/results')
+@app.route('/results', methods=['GET'])
 def results():
-    return render_template('results.html')
+    data = database_manager.get_all_data()
+    return render_template('results.html', data=data)
 
 @app.route('/scout_form', methods=['POST', 'GET'])
 def scout_form():
@@ -27,3 +28,14 @@ def scout_form():
 
         return redirect('/results')
     return render_template('scout_form.html')
+
+@app.route('/search', methods=['POST'])
+def search():
+    search_type = request.form.get('searchType')
+    query = request.form.get('query')
+
+    if search_type and query:
+        results = database_manager.search_data(search_type, query)
+        return render_template('results.html', data=results)
+
+    return redirect('/')

@@ -31,8 +31,25 @@ def insert_scout_data(scoutID, teamNumber, matchNumber):
 
 def get_all_data():
     conn = get_connection()
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM scout_data')
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+def search_data(search_type, query):
+    conn = get_connection()
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+
+    if search_type == "scoutID":
+        cursor.execute('SELECT * FROM scout_data WHERE scoutID LIKE ?', ('%' + query + '%',))
+    elif search_type == "teamNumber":
+        cursor.execute('SELECT * FROM scout_data WHERE teamNumber = ?', (query,))
+    elif search_type == "matchNumber":
+        cursor.execute('SELECT * FROM scout_data WHERE matchNumber = ?', (query,))
+
     rows = cursor.fetchall()
     conn.close()
     return rows

@@ -1,11 +1,29 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/results.css') }}">
         <title>Results</title>
+        <meta charset="UTF-8">
+        <a href="/">Accueil</a>
+        <a href="/scout_form">Nouveau Formulaire</a>
     </head>
 
     <body>
-        <h1>Results</h1>
+        <h1>Résultats</h1>
+        <h3>Recherche dans la base de donnée</h3>
+        <form method="POST" action="/search">
+            <div class="search-bar">
+                <label for="searchType">Type de recherche:</label>
+                <select id="searchType" name="searchType">
+                    <option value="scoutID">Scout ID</option>
+                    <option value="teamNumber">Team Number</option>
+                    <option value="matchNumber">Match Number</option>
+                </select>
+            <input type="text" name="query" placeholder="Rechercher..." required>
+            <button type="submit">Rechercher</button>
+            </div>
+        </form>
+        <h3>Résultats récents</h3>
         <table>
             <thead>
                 <tr>
@@ -16,11 +34,11 @@
             </thead>
             <tbody>
                 {% for row in data %}
-                <tr>
-                    <td>{{ row[1] }}</td>
-                    <td>{{ row[2] }}</td>
-                    <td>{{ row[3] }}</td>
-                </tr>
+                    <tr class="result-row" id="row-{{ row['scoutID'] }}">
+                        <td>{{ row['scoutID'] }}</td>
+                        <td>{{ row['teamNumber'] }}</td>
+                        <td>{{ row['matchNumber'] }}</td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
