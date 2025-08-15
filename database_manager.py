@@ -29,12 +29,12 @@ def insert_scout_data(scoutID, teamNumber, matchNumber):
     conn.commit()
     conn.close()
 
-def get_all_data():
+def get_recent_data():
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM scout_data')
-    rows = cursor.fetchall()
+    cursor.execute('SELECT * FROM scout_data ORDER BY id DESC')
+    rows = cursor.fetchmany(10)
     conn.close()
     return rows
 

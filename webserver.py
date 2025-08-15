@@ -14,7 +14,7 @@ def hello():
 
 @app.route('/results', methods=['GET'])
 def results():
-    data = database_manager.get_all_data()
+    data = database_manager.get_recent_data()
     return render_template('results.html', data=data)
 
 @app.route('/scout_form', methods=['POST', 'GET'])
