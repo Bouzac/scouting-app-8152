@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html> 
+    <head>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/results.css') }}">
+        <title>Search</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <a href="/">Accueil</a>
+        <a href="/scout_form">Nouveau Formulaire</a>
+    </head>
+
+    <body>
+        <h1>Recherche avancée</h1>
+        <form method="POST" action="/search">
+            <div class="search-bar">
+                <label for="searchType">Type de recherche:</label>
+                <select id="searchType" name="searchType">
+                    {% for s in search_types %}
+                        <option value="{{ s.value }}">{{ s.value }}</option>
+                    {% endfor %}
+                </select>
+                <div id="hiddenInputs">
+                    {% for s in search_types %}
+                        <input type="hidden" id="{{ s.value }}" name="{{ s.value }}" value="{{ s.type }}">
+                    {% endfor %}
+                </div>
+                <select id="comparator" name="comparator" style="display: none;">
+                    <option value="equals">=</option>
+                    <option value="not_equals">≠</option>
+                    <option value="greater_than">></option>
+                    <option value="less_than">&lt;</option>
+                </select>
+                <input type="text" name="query" placeholder="Rechercher..." required>
+                <button type="submit">Rechercher</button>
+            </div>
+        </form>
+
+    </body>
+</html>

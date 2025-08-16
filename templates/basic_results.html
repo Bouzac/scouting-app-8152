@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Results</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style/results.css') }}?v=1.0">
+    </head>
+
+    <body>
+
+        <div class="top_links">
+            <a href="/">Accueil</a>
+            <a href="/scout_form">Nouveau Formulaire</a>
+        </div>
+
+        <h1>Résultats</h1>
+        <h3>Recherche dans la base de donnée</h3>
+
+        <form method="POST" action="/search">
+            <div class="search-bar">
+                <label for="searchType">Type de recherche:</label>
+                <select id="searchType" name="searchType">
+                    <option value="scoutID">Scout ID</option>
+                    <option value="teamNumber">Team Number</option>
+                    <option value="matchNumber">Match Number</option>
+                </select>
+                <input type="text" name="query" placeholder="Rechercher..." required>
+                <button type="submit">Rechercher</button>
+            </div>
+            <div class="advanced_search">
+                <a href="/advanced_results">Recherche avancée</a>
+            </div>
+        </form>
+
+        <h3>{{ search_message }}</h3>
+
+        <div class="scrollable-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Scout ID</th>
+                        <th>Team Number</th>
+                    <th>Match Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                        <tr class="result-row" id="row-{{ row['scoutID'] }}">
+                            <td>{{ row['scoutID'] }}</td>
+                            <td>{{ row['teamNumber'] }}</td>
+                            <td>{{ row['matchNumber'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

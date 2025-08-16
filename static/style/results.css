@@ -7,9 +7,25 @@ body {
     padding: 2rem;
 }
 
-.advanced_search {
+.advanced_search{
     text-align: center;
-    margin: 20px 0;
+}
+
+.advanced_search a{
+    margin: 40px 0;
+    display: inline-block;
+    margin: 30px;
+    padding: 10px 30px;
+    background-color: #007704;
+    color: rgba(51, 255, 0, 0.555);
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.top_links a {
+    color: #0e6911;
+    text-decoration: underline;
+    font: italic 14px Arial, sans-serif;
 }
 
 /* Header */
@@ -62,5 +78,59 @@ tr:hover {
 }
 
 .search-bar {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+@media (max-width: 768px) {
+    body {
+        padding: 1rem;
+        
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    .advanced_search a {
+        display: block;
+        margin: 15px auto;
+        font-size: 1.2rem;
+        padding: 14px 28px;
+    }
+
+    table {
+        max-height: 100px;
+        width: 100%;
+        font-size: 1.2rem;
+    }
+
+    th, td {
+        padding: 18px;
+        font-size: 1.2rem;
+    }
+
+    .scrollable-table-container {
+    height: 450px; /* Set a fixed height for the scrollable area */
+    overflow-y: auto;
+  }
+  .scrollable-table-container thead,
+  .scrollable-table-container tbody {
+    display: block; /* Important for enabling independent scrolling */
+  }
+  .scrollable-table-container tbody {
+    height: calc(100% - 40px); /* Adjust based on header height */
+    overflow-y: auto;
+  }
+  .scrollable-table-container th,
+  .scrollable-table-container td {
+    /* Set fixed widths for columns to ensure alignment */
+    width: 100px; 
+  }
+}
+

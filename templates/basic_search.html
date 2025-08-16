@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style/results.css') }}">
         <title>Search</title>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <a href="/">Accueil</a>
         <a href="/scout_form">Nouveau Formulaire</a>
     </head>
@@ -11,7 +12,7 @@
     <body>
         <h1>Recherche</h1>
         <form method="POST" action="/search">
-            <div class="search-bar">
+            <div class="search-bar" style="overflow-x: auto;">
                 <label for="searchType">Type de recherche:</label>
                 <select id="searchType" name="searchType">
                     <option value="scoutID">Scout ID</option>
@@ -22,5 +23,6 @@
                 <button type="submit">Rechercher</button>
             </div>
         </form>
+
     </body>
 </html>
