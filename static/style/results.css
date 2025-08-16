@@ -71,10 +71,8 @@ tr:hover {
 /* Optional: Add some spacing around rows */
 .result-row {
     padding: 5px;
-}
-
-.result-row {
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .search-bar {

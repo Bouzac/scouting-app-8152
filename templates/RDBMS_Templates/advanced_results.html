@@ -32,7 +32,10 @@
                         <option value="less_than">&lt;</option>
                     </select>
                     <input type="text" name="query" placeholder="Rechercher..." required>
-                    <button type="submit">Rechercher</button>
+                    <button type="submit">Rechercher</button> 
+                </div>
+                <div class="advanced_search">
+                    <a href="/basic_results">Recherche Basique</a>
                 </div>
             </div>
         </form>
@@ -43,39 +46,36 @@
             <table>
                 <thead>
                     <tr>
-                        {% for s in search_types %}
-                            <th>{{ s.label }}</th>
-                        {% endfor %}
-                    </tr>
+                        <th>{{search_types[0].label}}</th>
+                        <th>{{search_types[1].label}}</th>
+                        <th>{{search_types[2].label}}</th>
+                        <th hidden>{{search_types[3].label}}</th>
+                        <th hidden>{{search_types[4].label}}</th>
+                        <th hidden>{{search_types[5].label}}</th>
+                        <th hidden>{{search_types[6].label}}</th>
+                        <th hidden>{{search_types[7].label}}</th>
+                        <th hidden>{{search_types[8].label}}</th>
+                        <th hidden>{{search_types[9].label}}</th>
+                </tr>
                 </thead>
                 <tbody>
                     {% for row in data %}
-                        <tr class="result-row" id="row-{{ row['scoutID'] }}">
-                            {% for s in search_types %}
-                                <td>{{ row[s.value] }}</td>
-                            {% endfor %}
+                    <tr class="result-row" id="row-{{ row[columns[0]] }}">
+                            <td class="{{search_types[0].label}}">{{ row[columns[1]] }}</td>
+                            <td class="{{search_types[1].label}}">{{ row[columns[2]] }}</td>
+                            <td class="{{search_types[2].label}}">{{ row[columns[3]] }}</td>
+                            <td hidden class="{{search_types[3].label}}">{{ row[columns[4]] }}</td>
+                            <td hidden class="{{search_types[4].label}}">{{ row[columns[5]] }}</td>
+                            <td hidden class="{{search_types[5].label}}">{{ row[columns[6]] }}</td>
+                            <td hidden class="{{search_types[6].label}}">{{ row[columns[7]] }}</td>
+                            <td hidden class="{{search_types[7].label}}">{{ row[columns[8]] }}</td>
+                            <td hidden class="{{search_types[8].label}}">{{ row[columns[9]] }}</td>
+                            <td hidden class="{{search_types[9].label}}">{{ row[columns[10]] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </body>
-    <script>
-        document.getElementById("searchType").addEventListener("change", function() {
-            const searchType = this.value;
-            const comparator = document.getElementById("comparator");
-            const search_types = {};
-            for (const s of document.querySelectorAll("input[type='hidden']")) {
-                s.style.display = "none";
-                search_types[s.id] = s.value;
-            }
-            
-
-            if(search_types[searchType] === 'number') {
-                comparator.style.display = "block";
-            } else {
-                comparator.style.display = "none";
-            }
-        });
-    </script>
+    <script src="/static/script/advanced_search_script.js"></script>
 </html>

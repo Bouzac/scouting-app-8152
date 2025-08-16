@@ -29,6 +29,9 @@
                     <input type="text" name="query" placeholder="Rechercher..." required>
                     <button type="submit">Rechercher</button>
                 </div>
+                <div class="advanced_search">
+                    <a href="/advanced_results">Recherche Avancée</a>
+                </div>
             </div>
         </form>
 
@@ -45,10 +48,10 @@
                 </thead>
                 <tbody>
                     {% for row in data %}
-                        <tr class="result-row" id="row-{{ row['scoutID'] }}">
-                            <td>{{ row[columns[0]] }}</td>
+                        <tr class="result-row" id="row-{{ row[columns[0]] }}">
                             <td>{{ row[columns[1]] }}</td>
                             <td>{{ row[columns[2]] }}</td>
+                            <td>{{ row[columns[3]] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
