@@ -50,26 +50,35 @@ def scouting_data_table():
     
     database_manager.create_table('scouting_data', {
         'scout_data_id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-        'match_id': 'INTEGER NOT NULL',
-        'team_id': 'INTEGER NOT NULL',
-        'scout_id': 'INTEGER NOT NULL',
-        'auto_points': 'INTEGER NOT NULL',
-        'teleop_points': 'INTEGER NOT NULL',
-        'endgame_points': 'INTEGER NOT NULL',
-        'penalties': 'INTEGER NOT NULL',
-        'robot_status': 'TEXT NOT NULL',
+        'match_id': 'INTEGER',
+        'team_id': 'INTEGER',
+        'scout_id': 'INTEGER',
+        'auto_points': 'INTEGER DEFAULT 0',
+        'teleop_points': 'INTEGER DEFAULT 0',
+        'endgame_points': 'INTEGER DEFAULT 0',
+        'penalties': 'INTEGER DEFAULT 0',
+        'robot_status': 'TEXT CHECK (robot_status IN (\'working\', \'damaged\', \'disabled\'))',
         'notes': 'TEXT',
-        'timestamp': 'REAL NOT NULL'
+        'timestamp': 'TEXT DEFAULT (datetime(\'now\'))'
     })
 
 def match_alliances_table():
     database_manager.create_table('match_alliances', {
         'match_alliance_id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-        'match_id': 'INTEGER NOT NULL',
-        'team_id': 'INTEGER NOT NULL',
-        'alliance': 'TEXT NOT NULL',
-        'score': 'INTEGER NOT NULL'
+        'match_id': 'INTEGER',
+        'alliance_color': 'TEXT CHECK(alliance_color IN (\'red\', \'blue\'))',
+        'team_id': 'INTEGER',
+        
+    }, {
+        'UNIQUE(match_id, team_id)',
+        'FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE',
+        'FOREIGN KEY (team_id) REFERENCES teams(team_id)'
     })
 
 def init_tables():
+    teams_table()
+    scouts_table()
+    events_table()
     matches_table()
+    scouting_data_table()
+    match_alliances_table()

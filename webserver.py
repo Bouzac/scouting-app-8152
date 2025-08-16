@@ -1,10 +1,9 @@
 from flask import Flask, redirect, render_template, request, json
 import database_manager
 import constants
+import tables
 
 app = Flask(__name__)
-database_manager.init_db()
-database_manager.update_db()
 
 @app.route('/')
 def index():
@@ -22,15 +21,16 @@ def scout_form():
         teamNumber = request.form.get('team_number')
         matchNumber = request.form.get('match_number')
 
-        database_manager.insert_scout_data(scoutID, teamNumber, matchNumber)
+        database_manager.insert_data('scouting_data', ['scout_id', 'team_id', 'match_id'], [scoutID, teamNumber, matchNumber])
 
         return redirect('/basic_results')
     return render_template('scout_form.html')
 
 @app.route('/basic_results', methods=['GET'])
 def basic_results():
-    data = database_manager.get_recent_data()
-    return render_template('basic_results.html', data=data, search_message='Résultats récents')
+    columns = constants.all_scouting_data_columns[:3]
+    data = database_manager.get_recent_data('scouting_data', 'scout_data_id', columns)
+    return render_template('basic_results.html', data=data, search_message='Résultats récents', columns=columns, search_types=constants.basic_search_types)
 
 @app.route('/basic_search', methods=['POST'])
 def basic_search():
@@ -38,20 +38,21 @@ def basic_search():
     query = request.form.get('query')
 
     if search_type and query:
-        results = database_manager.search_data(search_type, query)
-        return render_template('basic_results.html', data=results, search_message=f'Résultats de la recherche pour "{query.upper()}"')
+        results = database_manager.search_data('scouting_data', search_type, query)
+        return render_template('basic_results.html', data=results, search_message=f'Résultats de la recherche pour "{query.upper()}"', search_types=constants.basic_search_types, columns=constants.all_scouting_data_columns[:3])
 
     return redirect('/')
 
 @app.route('/advanced_results', methods=['GET', 'POST'])
 def advanced_results():
-    data = database_manager.get_recent_data()
-    search_types = constants.advanced_search_types()
-    return render_template('advanced_results.html', data=data, search_message='Résultats récents', search_types=search_types)
+    columns = constants.all_scouting_data_columns[:3]
+    data = database_manager.get_recent_data('scouting_data', 'scout_data_id', columns)
+    search_types = constants.advanced_search_types
+    return render_template('advanced_results.html', data=data, search_message='Résultats récents', search_types=search_types, columns=columns)
 
 @app.route('/advanced_search', methods=['POST'])
 def advanced_search():
-    search_types = constants.advanced_search_types()
+    search_types = constants.advanced_search_types
     if request.method == 'POST':
         search_type = request.form.get('searchType')
         query = request.form.get('query')

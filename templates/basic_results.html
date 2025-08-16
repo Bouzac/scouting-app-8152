@@ -17,19 +17,18 @@
         <h1>Résultats</h1>
         <h3>Recherche dans la base de donnée</h3>
 
-        <form method="POST" action="/search">
-            <div class="search-bar">
-                <label for="searchType">Type de recherche:</label>
-                <select id="searchType" name="searchType">
-                    <option value="scoutID">Scout ID</option>
-                    <option value="teamNumber">Team Number</option>
-                    <option value="matchNumber">Match Number</option>
-                </select>
-                <input type="text" name="query" placeholder="Rechercher..." required>
-                <button type="submit">Rechercher</button>
-            </div>
-            <div class="advanced_search">
-                <a href="/advanced_results">Recherche avancée</a>
+        <form method="POST" action="/basic_search">
+            <div class="search-bar-container">
+                <div class="search-bar">
+                    <label for="searchType">Type de recherche:</label>
+                    <select id="searchType" name="searchType">
+                        {% for s in search_types %}
+                            <option value="{{ s.value }}">{{ s.label }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="query" placeholder="Rechercher..." required>
+                    <button type="submit">Rechercher</button>
+                </div>
             </div>
         </form>
 
@@ -47,9 +46,9 @@
                 <tbody>
                     {% for row in data %}
                         <tr class="result-row" id="row-{{ row['scoutID'] }}">
-                            <td>{{ row['scoutID'] }}</td>
-                            <td>{{ row['teamNumber'] }}</td>
-                            <td>{{ row['matchNumber'] }}</td>
+                            <td>{{ row[columns[0]] }}</td>
+                            <td>{{ row[columns[1]] }}</td>
+                            <td>{{ row[columns[2]] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
