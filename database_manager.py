@@ -49,14 +49,13 @@ def search_data(table, search_type, query, limit=10):
     conn.close()
     return rows
 
-def advanced_search(table, search_type, query, operator):
+def advanced_search(table, search_type, search_query, operator):
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    query = "SELECT * FROM {} WHERE {} {} {}".format(table, search_type, operator, query)
-    print(query)
-    cursor.execute(query)
+    query = f"SELECT * FROM {table} WHERE {search_type} {operator} ?"
+    cursor.execute(query, (search_query,))
 
     rows = cursor.fetchall()
     conn.close()
@@ -84,3 +83,37 @@ def get_column_descriptions(table):
     columns = cursor.fetchall()
     conn.close()
     return columns
+
+def get_id_by_arg(id_type, table, param, arg):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT {} FROM {} WHERE {} = ?".format(id_type, table, param), (arg,))
+    row = cursor.fetchone()
+
+    if row:
+        id = row[0]
+    else:
+        cursor.execute("INSERT INTO {} ({}) VALUES (?)".format(table, param), (arg,))
+        id = cursor.lastrowid
+
+    conn.commit()
+    conn.close()
+    return id
+
+def get_arg_by_id(id_type, table, param, arg):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT {} FROM {} WHERE {} = ?".format(param, table, id_type), (arg,))
+    row = cursor.fetchone()
+
+    if row:
+        _arg = row[0]
+    else:
+        cursor.execute("INSERT INTO {} ({}) VALUES (?)".format(table, param), (arg,))
+        _arg = arg
+        
+    conn.commit()
+    conn.close()
+    return _arg

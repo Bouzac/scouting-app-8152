@@ -1,9 +1,10 @@
-import sqlite3
 from flask import Flask, jsonify, redirect, render_template, request, json
 import database_manager
 import constants
+import tables
 
 app = Flask(__name__)
+tables.init_tables()
 
 @app.route('/')
 def index():
@@ -13,10 +14,12 @@ def index():
 def scout_form():
     if request.method == 'POST':
         all_cols = constants.all_scouting_data_columns
-        values = []
-        for col in all_cols:
-            value = request.form.get(col)
-            values.append(value)
+        values = [
+            request.form.get('scout_data_id'),
+            database_manager.get_arg_by_id(table='scouts', param='name', arg=request.form.get('scout_name'), id_type='scout_id'),
+            database_manager.get_arg_by_id(table='teams', param='name', arg=request.form.get('team_name'), id_type='team_id'),
+            database_manager.get_arg_by_id(table='matches', param='name', arg=request.form.get('match_name'), id_type='match_id'),
+        ]
 
         database_manager.insert_data('scouting_data', all_cols, values)
 
@@ -50,6 +53,7 @@ def advanced_results(table='scouting_data'):
 @app.route('/advanced_search', methods=['POST'])
 def advanced_search(table='scouting_data'):
     search_types = constants.advanced_search_types
+    columns = constants.all_scouting_data_columns
     if request.method == 'POST':
         search_type = request.form.get('searchType')
         query = request.form.get('query')
@@ -65,7 +69,7 @@ def advanced_search(table='scouting_data'):
             results = database_manager.advanced_search(table, search_type, query, '<')
 
         if search_type and query:
-            return render_template('RDBMS_Templates/advanced_results.html', data=results, search_message=f'Résultats pour {search_type} {operator} {query.upper()}', search_types=search_types)
+            return render_template('RDBMS_Templates/advanced_results.html',columns=columns ,data=results, search_message=f'Résultats pour {search_type} {operator} {query.upper()}', search_types=search_types)
 
         return redirect('/advanced_results')
     
@@ -93,4 +97,3 @@ def get_scouting_details(scout_data_id):
         return jsonify(data)
     else:
         return jsonify({"error": "Not found"}), 404
-    

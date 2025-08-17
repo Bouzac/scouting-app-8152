@@ -60,6 +60,11 @@ def scouting_data_table():
         'robot_status': 'TEXT CHECK (robot_status IN (\'working\', \'damaged\', \'disabled\'))',
         'notes': 'TEXT',
         'timestamp': 'TEXT DEFAULT (datetime(\'now\'))'
+    }, {
+        'UNIQUE(match_id, team_id, scout_id)',
+        'FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE',
+        'FOREIGN KEY (team_id) REFERENCES teams(team_id) ON DELETE CASCADE',
+        'FOREIGN KEY (scout_id) REFERENCES scouts(scout_id) ON DELETE CASCADE'
     })
 
 def match_alliances_table():
