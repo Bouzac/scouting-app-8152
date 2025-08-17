@@ -12,8 +12,9 @@ body {
 }
 
 .scrollable-table-container{
-    max-height: 500px; /* Set a maximum height for the scrollable area */
+    max-height: 500px; /* Set a fixed height for the scrollable area */
     overflow-y: auto; /* Enable vertical scrolling */
+    z-index: 1; /* Ensure it appears above other elements */
 }
 
 .advanced_search a{
@@ -47,10 +48,6 @@ h3 {
 
 /* Table Styling */
 table {
-    width: 50%;
-    align-self: center;
-    margin-left: auto;
-    margin-right: auto;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: white;
@@ -82,18 +79,23 @@ tr:hover {
     cursor: pointer;
 }
 
-.detailes-panel{
+.details-panel {
+    position: absolute;
+    left: 100%; /* placer juste à droite du scrollable panel */
+    margin-left: 20px;
+    width: 300px;
     border: 1px solid #ccc;
     padding: 15px;
     background-color: #f9f9f9;
-    width: 300px;
+    display: none;
+    z-index: 10;
+    transition: top 0.2s ease;
 }
 
-.tables-and-details{
+.tables-and-details {
+    position: relative;
     display: flex;
     justify-content: center;
-    gap: 20px;
-    align-items: flex-start;
 }
 
 .search-bar {
@@ -105,51 +107,62 @@ tr:hover {
 @media (max-width: 768px) {
     body {
         padding: 1rem;
-        
+        font-size: 1rem;
     }
 
     h1 {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     h3 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .advanced_search a {
         display: block;
         margin: 15px auto;
-        font-size: 1.2rem;
-        padding: 14px 28px;
+        font-size: 1rem;
+        padding: 12px 20px;
     }
 
-    table {
-        max-height: 100px;
-        width: 100%;
-        font-size: 1.2rem;
-    }
-
-    th, td {
-        padding: 18px;
-        font-size: 1.2rem;
+    .search-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
     }
 
     .scrollable-table-container {
-    height: 450px; /* Set a fixed height for the scrollable area */
-    overflow-y: auto;
-  }
-  .scrollable-table-container thead,
-  .scrollable-table-container tbody {
-    display: block; /* Important for enabling independent scrolling */
-  }
-  .scrollable-table-container tbody {
-    height: calc(100% - 40px); /* Adjust based on header height */
-    overflow-y: auto;
-  }
-  .scrollable-table-container th,
-  .scrollable-table-container td {
-    /* Set fixed widths for columns to ensure alignment */
-    width: 100px; 
-  }
-}
+        max-width: 100%;
+        overflow-x: auto;
+        width: 100%;
+    }
 
+    table {
+        width: 100%;
+        font-size: 0.95rem;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 0.95rem;
+        word-break: break-word;
+    }
+
+    .tables-and-details-wrapper {
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
+
+    .details-panel {
+        position: relative;
+        top: auto;
+        left: auto;
+        margin-left: 0;
+        width: 100%;
+        margin-top: 20px;
+        z-index: 0;
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+}

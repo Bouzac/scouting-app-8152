@@ -19,13 +19,21 @@ document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll('.result-row');
     const panel = document.getElementById('details-panel');
     const content = document.getElementById('details-content');
+    const wrapper = document.querySelector('.tables-and-details');
 
     rows.forEach(row => {
         row.addEventListener('click', function () {
-            unParsedId = this.id;
-            parsedId = unParsedId.split("-")[1];
-            alert(parsedId);
+            const unParsedId = this.id;
+            const parsedId = unParsedId.split("-")[1];
+
+            rows.forEach(r => {
+                if (r !== row) {
+                    r.style.backgroundColor = "";
+                }
+            });
             
+            row.style.backgroundColor = "#FFFF00";
+
             fetch(`/get_scouting_details/${parsedId}`)
                 .then(response => {
                     if (!response.ok) throw new Error("Erreur AJAX");
@@ -44,6 +52,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         <p><strong>Notes:</strong> ${data.notes}</p>
                         <p><strong>Timestamp:</strong> ${data.timestamp}</p>
                     `;
+
+                    // Obtenir la position de la ligne et du wrapper
+                    const rowRect = row.getBoundingClientRect();
+                    const wrapperRect = wrapper.getBoundingClientRect();
+
+                    // Calculer l'offset top relatif au wrapper
+                    const offsetTop = rowRect.top - wrapperRect.top + wrapper.scrollTop;
+
+                    // Positionner le panneau et l'afficher
+                    panel.style.top = `${offsetTop}px`;
                     panel.style.display = "block";
                 })
                 .catch(err => {

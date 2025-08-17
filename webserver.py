@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Flask, jsonify, redirect, render_template, request, json
 import database_manager
 import constants
@@ -68,17 +69,28 @@ def advanced_search(table='scouting_data'):
 
         return redirect('/advanced_results')
     
-@app.route('/get_scouting_details/<int:scout_id>')
+@app.route('/get_scouting_details/<int:scout_data_id>')
 def get_scouting_details(scout_data_id):
-    conn = database_manager.get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM scouting_data WHERE scout_data_id = ?", (scout_data_id,))
-    row = cursor.fetchone()
-    conn.close()
+
+    # conn = database_manager.get_connection()
+    # conn.row_factory = sqlite3.Row  # Assure-toi que la row_factory est bien définie
+    # cursor = conn.cursor()
+
+    # cursor.execute("SELECT * FROM scouting_data WHERE scout_data_id = ?", (scout_data_id,))
+    # row = cursor.fetchone()
+
+    row = database_manager.search_data(
+        table='scouting_data',
+        search_type='scout_data_id',
+        query=str(scout_data_id),
+        limit=1
+    )
+
 
     if row:
-        columns = [desc[0] for desc in cursor.description]
-        data = dict(zip(columns, row))
+        row = row[0]
+        data = dict(row)
         return jsonify(data)
     else:
         return jsonify({"error": "Not found"}), 404
+    

@@ -38,14 +38,14 @@ def get_recent_data(table, table_id, columns, limit=10):
     conn.close()
     return rows
 
-def search_data(table, search_type, query):
+def search_data(table, search_type, query, limit=10):
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
 
-    cursor.execute('SELECT * FROM {} WHERE {} LIKE ?'.format(table, search_type), ('%' + query + '%',))
+    cursor.execute('SELECT * FROM {} WHERE {} LIKE ?'.format(table, search_type), (query))
 
-    rows = cursor.fetchall()
+    rows = cursor.fetchmany(limit)
     conn.close()
     return rows
 
@@ -76,3 +76,11 @@ def create_table(table_name, columns, special_args=None):
     print(f'Creating table {table_name} with query: {query}')
     conn.commit()
     conn.close()
+
+def get_column_descriptions(table):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(f"PRAGMA table_info({table})")
+    columns = cursor.fetchall()
+    conn.close()
+    return columns
