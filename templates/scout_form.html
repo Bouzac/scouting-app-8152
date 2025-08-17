@@ -9,22 +9,43 @@
   <form action="/scout_form" method="POST">
     <div id="Page1">
       <p>Initiales de l'éclaireur</p>
-      <input type="text" id="scoutID" name="scoutID">
+      <input type="text" id="scout_id" name="scout_id">
 
       <p>Numéro d'équipe</p>
-      <input type="number" id="team_number" name="team_number">
+      <input type="number" id="team_id" name="team_id">
 
       <p>Numéro de match</p>
-      <input type="number" id="match_number" name="match_number">
+      <input type="number" id="match_id" name="match_id">
 
       <a href="#" onclick="return show('Page2','Page1');">Next</a>
-  </div>
-    
-  <div id="Page2" style="display:none">
+    </div>
+      
+    <div id="Page2" style="display:none">
+      <p>Points auto</p>
+      <input type="number" id="auto_points" name="auto_points">
 
-    <a href="#" onclick="return show('Page1','Page2');">Previous</a>
-    <a href="#" onclick="return show('Page3','Page2');">Next</a>
-  </div>
+      <p>Points de téléopération</p>
+      <input type="number" id="teleop_points" name="teleop_points">
+
+      <p>Points de fin de match</p>
+      <input type="number" id="endgame_points" name="endgame_points">
+
+      <p>Pénalités</p>
+      <input type="number" id="penalties" name="penalties">
+
+      <p>Status du robot</p>
+      <select id="robot_status" name="robot_status">
+        <option value="working">Fonctionnel</option>
+        <option value="damaged">Endommagé</option>
+        <option value="disabled">Désactivé</option>
+      </select>
+
+      <p>Remarques</p>
+      <textarea id="notes" name="notes"></textarea>
+
+      <a href="#" onclick="return show('Page1','Page2');">Previous</a>
+      <a href="#" onclick="return show('Page3','Page2');">Next</a>
+    </div>
 
   <div id="Page3" style="display:none">
     <button type="submit">Soumettre</button>

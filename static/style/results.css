@@ -11,6 +11,11 @@ body {
     text-align: center;
 }
 
+.scrollable-table-container{
+    max-height: 500px; /* Set a maximum height for the scrollable area */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
 .advanced_search a{
     margin: 40px 0;
     display: inline-block;
@@ -42,8 +47,10 @@ h3 {
 
 /* Table Styling */
 table {
-    width: 80%;
-    margin: 2rem auto;
+    width: 50%;
+    align-self: center;
+    margin-left: auto;
+    margin-right: auto;
     border-collapse: collapse;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     background-color: white;
@@ -73,6 +80,20 @@ tr:hover {
     padding: 5px;
     text-transform: uppercase;
     cursor: pointer;
+}
+
+.detailes-panel{
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+    width: 300px;
+}
+
+.tables-and-details{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: flex-start;
 }
 
 .search-bar {

@@ -1,7 +1,6 @@
-from flask import Flask, redirect, render_template, request, json
+from flask import Flask, jsonify, redirect, render_template, request, json
 import database_manager
 import constants
-import tables
 
 app = Flask(__name__)
 
@@ -12,11 +11,13 @@ def index():
 @app.route('/scout_form', methods=['POST', 'GET'])
 def scout_form():
     if request.method == 'POST':
-        scoutID = request.form.get('scoutID')
-        teamNumber = request.form.get('team_number')
-        matchNumber = request.form.get('match_number')
+        all_cols = constants.all_scouting_data_columns
+        values = []
+        for col in all_cols:
+            value = request.form.get(col)
+            values.append(value)
 
-        database_manager.insert_data('scouting_data', ['scout_id', 'team_id', 'match_id'], [scoutID, teamNumber, matchNumber])
+        database_manager.insert_data('scouting_data', all_cols, values)
 
         return redirect('/basic_results')
     return render_template('scout_form.html')
@@ -66,3 +67,18 @@ def advanced_search(table='scouting_data'):
             return render_template('RDBMS_Templates/advanced_results.html', data=results, search_message=f'Résultats pour {search_type} {operator} {query.upper()}', search_types=search_types)
 
         return redirect('/advanced_results')
+    
+@app.route('/get_scouting_details/<int:scout_id>')
+def get_scouting_details(scout_data_id):
+    conn = database_manager.get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM scouting_data WHERE scout_data_id = ?", (scout_data_id,))
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        columns = [desc[0] for desc in cursor.description]
+        data = dict(zip(columns, row))
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Not found"}), 404

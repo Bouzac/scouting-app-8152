@@ -15,7 +15,7 @@
             <div class="search-bar-container">
                 <div class="search-bar">
                     <label for="searchType">Type de recherche:</label>
-                    <select id="searchType" name="searchType">
+                    <select id="advanced_searchType" name="searchType">
                         {% for s in search_types %}
                             <option value="{{ s.value }}">{{ s.value }}</option>
                         {% endfor %}
@@ -42,40 +42,41 @@
 
         <h3>{{ search_message }}</h3>
 
-        <div class="scrollable-table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>{{search_types[0].label}}</th>
-                        <th>{{search_types[1].label}}</th>
-                        <th>{{search_types[2].label}}</th>
-                        <th hidden>{{search_types[3].label}}</th>
-                        <th hidden>{{search_types[4].label}}</th>
-                        <th hidden>{{search_types[5].label}}</th>
-                        <th hidden>{{search_types[6].label}}</th>
-                        <th hidden>{{search_types[7].label}}</th>
-                        <th hidden>{{search_types[8].label}}</th>
-                        <th hidden>{{search_types[9].label}}</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for row in data %}
-                    <tr class="result-row" id="row-{{ row[columns[0]] }}">
+        <div class="table-and-details">
+            <div class="scrollable-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{search_types[0].label}}</th>
+                            <th>{{search_types[1].label}}</th>
+                            <th>{{search_types[2].label}}</th>
+                            <th hidden>{{search_types[3].label}}</th>
+                            <th hidden>{{search_types[4].label}}</th>
+                            <th hidden>{{search_types[5].label}}</th>
+                            <th hidden>{{search_types[6].label}}</th>
+                            <th hidden>{{search_types[7].label}}</th>
+                            <th hidden>{{search_types[8].label}}</th>
+                            <th hidden>{{search_types[9].label}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                        <tr class="result-row" id="row-{{ row[columns[0]] }}">
                             <td class="{{search_types[0].label}}">{{ row[columns[1]] }}</td>
                             <td class="{{search_types[1].label}}">{{ row[columns[2]] }}</td>
                             <td class="{{search_types[2].label}}">{{ row[columns[3]] }}</td>
-                            <td hidden class="{{search_types[3].label}}">{{ row[columns[4]] }}</td>
-                            <td hidden class="{{search_types[4].label}}">{{ row[columns[5]] }}</td>
-                            <td hidden class="{{search_types[5].label}}">{{ row[columns[6]] }}</td>
-                            <td hidden class="{{search_types[6].label}}">{{ row[columns[7]] }}</td>
-                            <td hidden class="{{search_types[7].label}}">{{ row[columns[8]] }}</td>
-                            <td hidden class="{{search_types[8].label}}">{{ row[columns[9]] }}</td>
-                            <td hidden class="{{search_types[9].label}}">{{ row[columns[10]] }}</td>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="details-panel" class="details-panel" style="display: none;">
+                <h3>Détails</h3>
+                <p id="details-content">Clique sur une ligne</p>
+            </div>
         </div>
+
     </body>
     <script src="/static/script/advanced_search_script.js"></script>
 </html>
