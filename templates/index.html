@@ -22,6 +22,26 @@
         <a href="/reports">Création de rapports</a>
     </div>
 
+    <div class="ranking-board">
+        <table>
+            <thead>
+                <tr>
+                    <th>Équipe</th>
+                    <th>Points moyens</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in ranking %}
+                <tr>
+                    <td>{{ team.team_number }}</td>
+                    <td>{{ team.avg_points }}</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
     <div class="images">
         <img src="{{ url_for('static', filename='images/deepdive_monalisa.jpg') }}" alt="deepdive_monalisa">
         <img src="{{ url_for('static', filename='images/crescendo_monalisa.jpg') }}" alt="crescendo_monalisa">

@@ -1,4 +1,43 @@
 /* Logo */
+
+.ranking-board {
+    width: 300px; /* ou la largeur que tu veux */
+    float: right;
+    margin: 30px 10% auto auto; /* haut droite bas gauche */
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+
+.ranking-board table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ranking-board th {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 12px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.ranking-board td {
+    padding: 10px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.ranking-board tr:hover {
+    background-color: #f0f8ff;
+}
+
+
+
+
 .logo {
     text-align: center;
     margin: 20px 0;
@@ -62,6 +101,8 @@ p {
     border-radius: 8px;
 }
 
+
+
 /* Responsive */
 @media screen and (max-width: 600px) {
     .redirect_buttons a {
@@ -75,4 +116,36 @@ p {
         height: auto;
         margin: 10px 0;
     }
+    .ranking-board {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.ranking-board table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ranking-board th {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 12px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.ranking-board td {
+    padding: 10px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.ranking-board tr:hover {
+    background-color: #f0f8ff;
+}
 }

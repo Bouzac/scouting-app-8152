@@ -53,7 +53,7 @@ def get_recent_data(table, table_id, columns, limit=10):
     conn.close()
     return rows
 
-def search_data(base_table, search_type, search_query, operator = "=", cols = [], limit = 10):
+def search_data(base_table, search_type=None, search_query=None, operator="=", cols=[], limit=10):
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
@@ -68,10 +68,14 @@ def search_data(base_table, search_type, search_query, operator = "=", cols = []
         to_col = fk[4]
         query += f' JOIN {ref_table} ON {base_table}.{from_col} = {ref_table}.{to_col}'
 
-    query += f" WHERE {search_type} {operator} ?"
-
-    print(query, (search_query,))
-    cursor.execute(query, (search_query,))
+    if search_type != None and search_query != None:
+        query += f" WHERE {search_type} {operator} ?"
+        print(query, (search_query,))
+        cursor.execute(query, (search_query,))
+    else:
+        query += " WHERE {}".format(' AND '.join([f"{col}" for col in cols]))
+        print(query)
+        cursor.execute(query)
     rows = cursor.fetchmany(limit)
     conn.close()
     return rows
@@ -132,3 +136,53 @@ def get_arg_by_id(id_type, table, param, arg):
     conn.commit()
     conn.close()
     return _arg
+
+def get_ranking_data_by_points():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    query = """
+    SELECT t.team_number, AVG(sd.auto_points) AS avg_points_auto, AVG(sd.teleop_points) AS avg_points_teleop, AVG(sd.endgame_points) AS avg_points_endgame
+    FROM scouting_data AS sd
+    JOIN teams AS t ON sd.team_id = t.team_id
+    GROUP BY t.team_number
+    ORDER BY avg_points_auto DESC, avg_points_teleop DESC, avg_points_endgame DESC
+    """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    
+    ranking_data = []
+    for row in rows:
+        ranking_data.append({
+            'team_number': row[0],
+            'avg_points' : row[1] + row[2] + row[3],
+        })
+
+    conn.close()
+    return ranking_data
+
+def get_ranking_data_by_wins():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    query = """
+    SELECT t.team_number, COUNT(*) AS win_count
+    FROM match_results AS mr
+    JOIN teams AS t ON mr.winning_team_id = t.team_id
+    GROUP BY t.team_number
+    ORDER BY win_count DESC
+    """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+
+    ranking_data = []
+    for row in rows:
+        ranking_data.append({
+            'team_number': row[0],
+            'win_count': row[1],
+        })
+
+    conn.close()
+    return ranking_data

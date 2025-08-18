@@ -13,7 +13,8 @@ tables.init_tables()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    ranking = db_m.get_ranking_data()
+    return render_template('index.html', ranking=ranking)
 
 @app.route('/scout_form', methods=['POST', 'GET'])
 def scout_form():
@@ -149,13 +150,23 @@ def report_details(team_number):
         base_table='scouting_data',
         search_type='teams.team_number',
         search_query=team_number,
+        operator="=",
         cols=columns
+    )
+
+    event_data = db_m.search_data(
+        base_table='scouting_data',
+        cols=['auto_points',
+              'teleop_points',
+              'endgame_points'
+        ]
     )
 
     if not data:
         return f"Aucune donnée trouvée pour l'équipe {team_number}"
 
     df = pd.DataFrame(data, columns=columns) 
+    event_df = pd.DataFrame(event_data, columns=['auto_points', 'teleop_points', 'endgame_points'])
 
     if order_by in df.columns:
         df.sort_values(by=order_by, ascending=not reverse, inplace=True)
@@ -163,6 +174,9 @@ def report_details(team_number):
     auto_avg = df['auto_points'].mean()
     teleop_avg = df['teleop_points'].mean()
     endgame_avg = df['endgame_points'].mean()
+    event_auto_avg = event_df['auto_points'].mean()
+    event_teleop_avg = event_df['teleop_points'].mean()
+    event_endgame_avg = event_df['endgame_points'].mean()
 
     fig, ax = plt.subplots()
     ax.bar(['Auto', 'Teleop', 'Endgame'], [auto_avg, teleop_avg, endgame_avg])
@@ -183,7 +197,10 @@ def report_details(team_number):
         endgame_avg=endgame_avg,
         current_sort=order_by,
         reverse=reverse,
-        columns = columns
+        columns=columns,
+        auto_event_avg=event_auto_avg,
+        teleop_event_avg=event_teleop_avg,
+        endgame_event_avg=event_endgame_avg
     )
 
 @app.route('/export_csv/<int:team_number>')

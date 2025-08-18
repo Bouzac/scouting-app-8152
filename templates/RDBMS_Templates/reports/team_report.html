@@ -14,6 +14,8 @@
 
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -31,8 +33,20 @@
         <li>Points Endgame : {{ endgame_avg|round(1) }}</li>
     </ul>
 
-    <h2>Graphique</h2>
-    <img src="data:image/png;base64,{{ photo_url }}" alt="Graphique moyenne" style="max-width:500px;">
+    <h2>Statistiques de l'équipe</h2>
+    <canvas id="teamChart" width="400" height="200"></canvas>
+    <script id="chart-data" type="application/json">
+    {
+        "labels": ["Auto", "Téléop", "Endgame"],
+        "data": [{{ auto_avg|round(1) }}, {{ teleop_avg|round(1) }}, {{ endgame_avg|round(1) }}]
+    }
+    </script>
+    <script id="chart-event-data" type="application/json">
+    {
+        "labels": ["Auto", "Téléop", "Endgame"],
+        "data": [{{ auto_event_avg|round(1) }}, {{ teleop_event_avg|round(1) }}, {{ endgame_event_avg|round(1) }}]
+    }
+    </script>
 
     <h2>Données brutes</h2>
     <table id="reportTable">
@@ -72,5 +86,6 @@
         </tbody>
     </table>
     <script src="/static/script/reports/team_report.js"></script>
+    
 </body>
 </html>

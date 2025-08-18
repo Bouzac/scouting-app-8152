@@ -5,6 +5,13 @@ body {
     color: #333;
 }
 
+#teamChart {
+    max-width: auto;
+    height: auto;
+    margin: 1rem auto;
+    display: block;
+}
+
 h1, h2 {
     text-align: center;
     color: #004080;
