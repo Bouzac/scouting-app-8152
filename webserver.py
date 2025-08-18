@@ -13,7 +13,7 @@ tables.init_tables()
 
 @app.route('/')
 def index():
-    ranking = db_m.get_ranking_data()
+    ranking = db_m.get_ranking_data_by_points()
     return render_template('index.html', ranking=ranking)
 
 @app.route('/scout_form', methods=['POST', 'GET'])
