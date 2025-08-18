@@ -1,25 +1,30 @@
-<html>
-    <head>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
-        <title>Index</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="UTF-8">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo">
-        </div>        
-    </head>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Index</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <body>
-        <h1>Welcome to the Scouting App</h1>
-        <p>This is the main page of the scouting application.</p>
-        <div class="redirect_buttons">
-        <a href="/basic_results">Go to results Page</a>
-        <a href="/scout_form">Scout a new team</a>
-        </div>
-    </body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
+</head>
+
+<body>
+    <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo">
+    </div>
+
+    <h1>Welcome to the Scouting App</h1>
+    <p>This is the main page of the scouting application.</p>
+
+    <div class="redirect_buttons">
+        <a href="/basic_results">Go to Results Page</a>
+        <a href="/scout_form">Scout a New Team</a>
+        <a href="/reports">Création de rapports</a>
+    </div>
 
     <div class="images">
         <img src="{{ url_for('static', filename='images/deepdive_monalisa.jpg') }}" alt="deepdive_monalisa">
         <img src="{{ url_for('static', filename='images/crescendo_monalisa.jpg') }}" alt="crescendo_monalisa">
     </div>
+</body>
 </html>

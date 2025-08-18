@@ -4,7 +4,7 @@ import constants
 DB_NAME = ':memory:' if constants.IN_MEMORY_DB else 'scouting_app.db'
 
 def get_connection():
-    conn=sqlite3.connect(DB_NAME)
+    conn=sqlite3.connect(DB_NAME, check_same_thread=False)
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
@@ -28,36 +28,51 @@ def get_recent_data(table, table_id, columns, limit=10):
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
+    query = ''
     if isinstance(columns, list):
-        cursor.execute('SELECT {} FROM {} ORDER BY {} DESC'.format(', '.join(columns), table, table_id))
+        query = 'SELECT {} FROM {}'.format(', '.join(columns), table)
     elif isinstance(columns, str):
-        cursor.execute('SELECT {} FROM {} ORDER BY {} DESC'.format(columns, table, table_id))
+        query = 'SELECT {} FROM {}'.format(columns, table)
     else:
-        cursor.execute('SELECT * FROM {} ORDER BY {} DESC'.format(table, table_id))
+        query = 'SELECT * FROM {}'.format(table)
+
+    cursor.execute("PRAGMA foreign_key_list({})".format(table))
+    foreign_key_list = cursor.fetchall()
+
+    for fk in foreign_key_list:
+        ref_table = fk[2]
+        from_col = fk[3]
+        to_col = fk[4]
+        query += f' JOIN {ref_table} ON {table}.{from_col} = {ref_table}.{to_col}'
+
+    query += f' ORDER BY {table}.{table_id} DESC'
+    
+    print(query)
+    cursor.execute(query)
     rows = cursor.fetchmany(limit)
     conn.close()
     return rows
 
-def search_data(table, search_type, query, limit=10):
+def search_data(base_table, search_type, search_query, operator = "=", cols = [], limit = 10):
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
+    print(cols)
 
-    cursor.execute('SELECT * FROM {} WHERE {} LIKE ?'.format(table, search_type), (query))
+    query = 'SELECT {} FROM {}'.format(', '.join(cols), base_table)
 
-    rows = cursor.fetchmany(limit)
-    conn.close()
-    return rows
+    foreign_key_list = cursor.execute("PRAGMA foreign_key_list({})".format(base_table)).fetchall()
+    for fk in foreign_key_list:
+        ref_table = fk[2]
+        from_col = fk[3]
+        to_col = fk[4]
+        query += f' JOIN {ref_table} ON {base_table}.{from_col} = {ref_table}.{to_col}'
 
-def advanced_search(table, search_type, search_query, operator):
-    conn = get_connection()
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    query += f" WHERE {search_type} {operator} ?"
 
-    query = f"SELECT * FROM {table} WHERE {search_type} {operator} ?"
+    print(query, (search_query,))
     cursor.execute(query, (search_query,))
-
-    rows = cursor.fetchall()
+    rows = cursor.fetchmany(limit)
     conn.close()
     return rows
 
@@ -88,7 +103,7 @@ def get_id_by_arg(id_type, table, param, arg):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT {} FROM {} WHERE {} = ?".format(id_type, table, param), (arg,))
+    cursor.execute("SELECT {} FROM {} WHERE \"{}\" = ?".format(id_type, table, param), (arg,))
     row = cursor.fetchone()
 
     if row:
@@ -113,7 +128,7 @@ def get_arg_by_id(id_type, table, param, arg):
     else:
         cursor.execute("INSERT INTO {} ({}) VALUES (?)".format(table, param), (arg,))
         _arg = arg
-        
+
     conn.commit()
     conn.close()
     return _arg

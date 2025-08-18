@@ -80,8 +80,7 @@ tr:hover {
 }
 
 .details-panel {
-    position: absolute;
-    left: 100%; /* placer juste à droite du scrollable panel */
+    position: relative;
     margin-left: 20px;
     width: 300px;
     border: 1px solid #ccc;

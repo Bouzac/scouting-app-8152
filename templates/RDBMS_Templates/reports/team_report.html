@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Rapport équipe {{ team_number }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/report_styles/team_report.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+</head>
+<body>
+
+    <div class="top-links">
+        <a href="/" class="button">Accueil</a>
+        <a href="/export_csv/{{ team_number }}" class="button">Exporter CSV</a>
+    </div>
+
+    <h1>Rapport de performance - Équipe {{ team_number }}</h1>
+
+    <h2>Résumé</h2>
+    <ul>
+        <li>Points Auto moyens : {{ auto_avg|round(1) }}</li>
+        <li>Points Téléop : {{ teleop_avg|round(1) }}</li>
+        <li>Points Endgame : {{ endgame_avg|round(1) }}</li>
+    </ul>
+
+    <h2>Graphique</h2>
+    <img src="data:image/png;base64,{{ photo_url }}" alt="Graphique moyenne" style="max-width:500px;">
+
+    <h2>Données brutes</h2>
+    <table id="reportTable">
+        <thead>
+            <tr>
+                {% for col in columns %}
+                <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+            <tr id="filtersRow">
+            {% for col in columns %}
+                <th>
+                {% if col in ['auto_points', 'teleop_points', 'endgame_points', 'penalties'] %}
+                    <select class="num-operator" data-col-index="{{ loop.index0 }}">
+                    <option value="=">=</option>
+                    <option value=">">&gt;</option>
+                    <option value="<">&lt;</option>
+                    <option value=">=">&ge;</option>
+                    <option value="<=">&le;</option>
+                    </select>
+                    <input type="number" class="num-value" data-col-index="{{ loop.index0 }}">
+                {% else %}
+                    <input type="text" placeholder="Recherche..." class="column-filter" data-col-index="{{ loop.index0 }}">
+                {% endif %}
+                </th>
+            {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+            {% for col in columns %}
+            <td>{{ row[col] }}</td>
+            {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="/static/script/reports/team_report.js"></script>
+</body>
+</html>

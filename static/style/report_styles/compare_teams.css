@@ -1,0 +1,85 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    margin: 0;
+    padding: 1rem;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 1em auto;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 0.5em 1em;
+    text-align: center;
+}
+
+th {
+    background: #eee;
+}
+
+.side-by-side {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.team-table {
+    flex: 1 1 45%;
+    min-width: 300px;
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin: 1rem auto;
+}
+
+img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 768px) {
+    .side-by-side {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .team-table {
+        width: 100%;
+    }
+
+    table {
+        font-size: 0.9rem;
+    }
+
+    th, td {
+        padding: 0.4em 0.6em;
+    }
+}
+
+/* DataTables overrides */
+table.dataTable thead th {
+    background-color: #004aad;
+    color: white;
+}
+
+.dataTables_wrapper {
+    overflow-x: auto;
+    margin: auto;
+    max-width: 100%;
+}

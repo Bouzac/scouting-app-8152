@@ -1,19 +1,19 @@
 basic_search_types = [
-    {"value": "scout_id", "label": "Scout ID"},
-    {"value": "team_id", "label": "Team Number"},
-    {"value": "match_id", "label": "Match Number"}
+    {"value": "scouts.initials", "label": "Initiales de l'éclaireur"},
+    {"value": "teams.team_number", "label": "Numéro d'équipe"},
+    {"value": "matches.match_number", "label": "Numéro de match"}
 ]
 
 advanced_search_types = [
-    {"value": "scout_id", "label": "Scout ID", "type": "text"},
-    {"value": "team_id", "label": "Team Number", "type": "number"},
-    {"value": "match_id", "label": "Match Number", "type": "number"},
+    {"value": "scouts.initials", "label": "Initiales de l'éclaireur", "type": "text"},
+    {"value": "teams.team_number", "label": "Numéro d'équipe", "type": "number"},
+    {"value": "matches.match_number", "label": "Numéro de match", "type": "number"},
     {"value": "auto_points", "label": "Auto Points", "type": "number"},
     {"value": "teleop_points", "label": "Teleop Points", "type": "number"},
     {"value": "endgame_points", "label": "Endgame Points", "type": "number"},
     {"value": "penalties", "label": "Penalties", "type": "number"},
     {"value": "robot_status", "label": "Robot Status", "type": "text"},
-    {"value": "notes", "label": "Notes", "type": "text"},
+    {"value": "scouting_data.notes", "label": "Notes", "type": "text"},
     {"value": "timestamp", "label": "Timestamp", "type": "text"}
 ]
 

@@ -1,54 +1,78 @@
+/* Logo */
+.logo {
+    text-align: center;
+    margin: 20px 0;
+}
 .logo img {
     width: 100px;
     height: auto;
 }
 
-.logo {
-    text-align: center;
-    margin: 20px 0;
-}
-
+/* Body */
 body {
     margin: 0;
+    padding: 0 1rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
 }
 
-.images img {
-    max-height: 300px;
-    width: auto;
-}
-
-.images {
-    text-align: center;
-    margin-top: auto;
-}
-
+/* Headings & text */
 h1 {
     text-align: center;
     color: #222;
-    font-family: Arial, sans-serif;
 }
-
 p {
     text-align: center;
     color: #555;
-    font-family: Arial, sans-serif;
 }
 
-a {
+/* Buttons */
+.redirect_buttons {
+    text-align: center;
+    margin: 20px 0;
+}
+.redirect_buttons a {
     display: inline-block;
     margin: 10px;
-    padding: 10px 20px;
+    padding: 12px 24px;
     background-color: #007704;
-    color: rgba(51, 255, 0, 0.555);
+    color: #fff;
+    font-weight: bold;
     text-decoration: none;
     border-radius: 5px;
+    transition: background-color 0.2s;
+}
+.redirect_buttons a:hover {
+    background-color: #005c03;
 }
 
-.redirect_buttons{
+/* Images */
+.images {
     text-align: center;
+    margin-top: auto;
+    padding: 20px 0;
+}
+.images img {
+    max-height: 300px;
+    width: auto;
+    margin: 0 10px;
+    border-radius: 8px;
 }
 
+/* Responsive */
+@media screen and (max-width: 600px) {
+    .redirect_buttons a {
+        display: block;
+        margin: 10px auto;
+        width: 80%;
+    }
 
+    .images img {
+        max-width: 90%;
+        height: auto;
+        margin: 10px 0;
+    }
+}

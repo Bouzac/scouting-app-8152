@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <title>Comparaison Équipes {{ team1 }} vs {{ team2 }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/report_styles/compare_teams.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
+    <h1>Comparaison entre Équipe {{ team1 }} et Équipe {{ team2 }}</h1>
+
+    <h2>Graphique des moyennes</h2>
+    <img src="data:image/png;base64,{{ photo_url }}" alt="Graphique comparatif" style="max-width:600px;" />
+
+    <div class="side-by-side">
+        <div class="team-table">
+            <h3>Stats Équipe {{ team1 }}</h3>
+            <ul>
+                <li>Matchs joués : {{ stats1.matches_played }}</li>
+                <li>Points Auto moyens : {{ stats1.auto_points|round(2) }}</li>
+                <li>Points Téléop moyens : {{ stats1.teleop_points|round(2) }}</li>
+                <li>Points Endgame moyens : {{ stats1.endgame_points|round(2) }}</li>
+                <li>Pénalités moyennes : {{ stats1.penalties|round(2) }}</li>
+                <li>Status Robot : 
+                    <ul>
+                        {% for status, count in stats1.robot_status_counts.items() %}
+                        <li>{{ status }} : {{ count }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <div class="team-table">
+            <h3>Stats Équipe {{ team2 }}</h3>
+            <ul>
+                <li>Matchs joués : {{ stats2.matches_played }}</li>
+                <li>Points Auto moyens : {{ stats2.auto_points|round(2) }}</li>
+                <li>Points Téléop moyens : {{ stats2.teleop_points|round(2) }}</li>
+                <li>Points Endgame moyens : {{ stats2.endgame_points|round(2) }}</li>
+                <li>Pénalités moyennes : {{ stats2.penalties|round(2) }}</li>
+                <li>Status Robot : 
+                    <ul>
+                        {% for status, count in stats2.robot_status_counts.items() %}
+                        <li>{{ status }} : {{ count }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <h2>Détail par match</h2>
+    <div class="side-by-side">
+        <table class="team-table" id="table_1">
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data1 %}
+                <tr>
+                    {% for col in columns %}
+                    <td>{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <table class="team-table" id="tables_2">
+            <thead>
+                <tr>
+                    {% for col in columns %}
+                    <th>{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data2 %}
+                <tr>
+                    {% for col in columns %}
+                    <td>{{ row[col] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $('#table_1').DataTable({
+                paging: false,
+                info: false,
+                searching: false,
+                ordering: true // Active le tri par colonne
+            });
+            $('#tables_2').DataTable({
+                paging: false,
+                info: false,
+                searching: false,
+                ordering: true // Active le tri par colonne
+            });
+        });
+    </script>
+</body>
+</html>

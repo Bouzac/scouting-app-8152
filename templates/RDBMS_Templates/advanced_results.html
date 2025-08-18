@@ -5,11 +5,18 @@
         <title>Recherche Avancée</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <a href="/">Accueil</a>
-        <a href="/scout_form">Nouveau Formulaire</a>
+        <!-- jQuery + DataTables -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     </head>
 
     <body>
+
+        <div class="top_links">
+            <a href="/">Accueil</a>
+            <a href="/scout_form">Nouveau Formulaire</a>
+        </div>
         <h1>Recherche Avancée</h1>
         <form method="POST" action="/advanced_search">
             <div class="search-bar-container">
@@ -50,21 +57,14 @@
                             <th>{{search_types[0].label}}</th>
                             <th>{{search_types[1].label}}</th>
                             <th>{{search_types[2].label}}</th>
-                            <th hidden>{{search_types[3].label}}</th>
-                            <th hidden>{{search_types[4].label}}</th>
-                            <th hidden>{{search_types[5].label}}</th>
-                            <th hidden>{{search_types[6].label}}</th>
-                            <th hidden>{{search_types[7].label}}</th>
-                            <th hidden>{{search_types[8].label}}</th>
-                            <th hidden>{{search_types[9].label}}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for row in data %}
-                        <tr class="result-row" id="row-{{ row[columns[0]] }}">
-                            <td class="{{search_types[0].label}}">{{ row[columns[1]] }}</td>
-                            <td class="{{search_types[1].label}}">{{ row[columns[2]] }}</td>
-                            <td class="{{search_types[2].label}}">{{ row[columns[3]] }}</td>
+                        <tr class="result-row" id="row-{{ row[0] }}">
+                            <td class="{{search_types[0].label}}">{{ row[1] }}</td>
+                            <td class="{{search_types[1].label}}">{{ row[2] }}</td>
+                            <td class="{{search_types[2].label}}">{{ row[3] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -79,4 +79,12 @@
 
     </body>
     <script src="/static/script/advanced_search_script.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const table = $('table').DataTable({
+            responsive: true,
+            searching: false
+        });
+    });
+    </script>
 </html>

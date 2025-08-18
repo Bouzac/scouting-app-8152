@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Rapports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/report_styles/reports.css') }}">
+</head>
+<body>
+    <h1>Rapports</h1>
+    <p>Bienvenue sur la page des rapports.</p>
+    <p>Vous pouvez générer des rapports basés sur la base de donnée.</p>
+    <input type="text" id="team_number" placeholder="Entrez le numéro de l'équipe">
+    <button onclick="getInputValue()">Générer Rapport</button>
+    <br>
+    <a href="/compare_teams_form" class="button">Comparer deux équipes</a>
+</body>
+<script src="{{ url_for('static', filename='script/report.js') }}"></script>
+</html>

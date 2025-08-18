@@ -1,0 +1,65 @@
+/* Fichier : static/style/report_styles/compare_teams.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f9;
+    color: #222;
+    margin: 0;
+    padding: 30px 20px;
+    text-align: center;
+}
+
+h1 {
+    color: #007704;
+    margin-bottom: 20px;
+}
+
+form {
+    background: white;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #444;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 10px 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 25px;
+    width: 100%;
+    padding: 12px 0;
+    background-color: #007704;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+button:hover {
+    background-color: #005c03;
+}
+
+p[style*="color:red"] {
+    max-width: 400px;
+    margin: 0 auto 20px;
+    font-weight: bold;
+}

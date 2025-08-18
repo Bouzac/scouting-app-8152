@@ -9,13 +9,13 @@
   <form action="/scout_form" method="POST">
     <div id="Page1">
       <p>Initiales de l'éclaireur</p>
-      <input type="text" id="scout_id" name="scout_id">
+      <input type="text" id="scout_name" name="scout_name" required>
 
       <p>Numéro d'équipe</p>
-      <input type="number" id="team_id" name="team_id">
+      <input type="number" id="team_number" name="team_number" required>
 
       <p>Numéro de match</p>
-      <input type="number" id="match_id" name="match_id">
+      <input type="number" id="match_number" name="match_number" required>
 
       <a href="#" onclick="return show('Page2','Page1');">Next</a>
     </div>

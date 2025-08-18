@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Results</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='style/results.css') }}?v=1.0">
+        <!-- jQuery + DataTables -->
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     </head>
 
     <body>
@@ -37,25 +41,41 @@
 
         <h3>{{ search_message }}</h3>
 
-        <div class="scrollable-table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Scout ID</th>
-                        <th>Team Number</th>
-                    <th>Match Number</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {% for row in data %}
-                        <tr class="result-row" id="row-{{ row[columns[0]] }}">
-                            <td>{{ row[columns[1]] }}</td>
-                            <td>{{ row[columns[2]] }}</td>
-                            <td>{{ row[columns[3]] }}</td>
+        <div class="tables-and-details">
+            <div class="scrollable-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>{{search_types[0].label}}</th>
+                            <th>{{search_types[1].label}}</th>
+                            <th>{{search_types[2].label}}</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                        <tr class="result-row" id="row-{{ row[0] }}">
+                            <td class="{{search_types[0].label}}">{{ row[1] }}</td>
+                            <td class="{{search_types[1].label}}">{{ row[2] }}</td>
+                            <td class="{{search_types[2].label}}">{{ row[3] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="details-panel" class="details-panel" style="display: none;">
+                <h3>Détails</h3>
+                <p id="details-content">Clique sur une ligne</p>
+            </div>
         </div>
     </body>
+    <script src="/static/script/advanced_search_script.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const table = $('table').DataTable({
+            responsive: true,
+            searching: false
+        });
+    });
+    </script>
 </html>

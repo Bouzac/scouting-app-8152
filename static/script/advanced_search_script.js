@@ -1,31 +1,16 @@
-document.getElementById("advanced_searchType").addEventListener("change", function() {
-    const searchType = this.value;
-    const comparator = document.getElementById("comparator");
-    const search_types = {};
-    for (const s of document.querySelectorAll("input[type='hidden']")) {
-        s.style.display = "none";
-        search_types[s.id] = s.value;
-    }
-    
 
-    if(search_types[searchType] === 'number') {
-        comparator.style.display = "block";
-    } else {
-        comparator.style.display = "none";
-    }
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     const rows = document.querySelectorAll('.result-row');
     const panel = document.getElementById('details-panel');
     const content = document.getElementById('details-content');
     const wrapper = document.querySelector('.tables-and-details');
-
+    
     rows.forEach(row => {
         row.addEventListener('click', function () {
             const unParsedId = this.id;
             const parsedId = unParsedId.split("-")[1];
-
+            
             rows.forEach(r => {
                 if (r !== row) {
                     r.style.backgroundColor = "";
@@ -41,9 +26,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(data => {
                     content.innerHTML = `
-                        <p><strong>Match:</strong> ${data.match_id}</p>
-                        <p><strong>Team:</strong> ${data.team_id}</p>
-                        <p><strong>Scout:</strong> ${data.scout_id}</p>
+                        <p><strong>Match:</strong> ${data.match_number}</p>
+                        <p><strong>Team:</strong> ${data.team_number}</p>
+                        <p><strong>Scout:</strong> ${data.initials}</p>
                         <p><strong>Auto:</strong> ${data.auto_points}</p>
                         <p><strong>Teleop:</strong> ${data.teleop_points}</p>
                         <p><strong>Endgame:</strong> ${data.endgame_points}</p>
@@ -70,4 +55,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         });
     });
+});
+
+document.getElementById("advanced_searchType").addEventListener("change", function() {
+    const searchType = this.value;
+    const comparator = document.getElementById("comparator");
+    const search_types = {};
+    for (const s of document.querySelectorAll("input[type='hidden']")) {
+        s.style.display = "none";
+        search_types[s.id] = s.value;
+    }
+    
+
+    if(search_types[searchType] === 'number') {
+        comparator.style.display = "block";
+    } else {
+        comparator.style.display = "none";
+    }
 });

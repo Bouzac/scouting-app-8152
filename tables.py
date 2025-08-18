@@ -16,7 +16,7 @@ def scouts_table():
     
     database_manager.create_table('scouts', {
         'scout_id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-        'name': 'TEXT NOT NULL',
+        'initials': 'TEXT NOT NULL',
         'notes': 'TEXT'
     })
 
