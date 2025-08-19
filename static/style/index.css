@@ -1,7 +1,5 @@
-/* Logo */
-
 .ranking-board {
-    width: 300px; /* ou la largeur que tu veux */
+    width: 300px; /* la largeur souhaitée */
     float: right;
     margin: 30px 10% auto auto; /* haut droite bas gauche */
     background-color: #ffffff;
@@ -43,7 +41,7 @@
     margin: 20px 0;
 }
 .logo img {
-    width: 100px;
+    width: 200px;
     height: auto;
 }
 

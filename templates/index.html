@@ -2,23 +2,23 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Index</title>
+    <title>Page principales</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="icon" type="image/x-icon" href="/static/images/icon.png">
     <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
 </head>
 
 <body>
     <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="logo">
+        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo">
     </div>
 
-    <h1>Welcome to the Scouting App</h1>
-    <p>This is the main page of the scouting application.</p>
+    <h1>Bienvenue à l'Application de Scouting ESSC-8152</h1>
+    <p>vous êtes présentement sur la page principale.</p>
 
     <div class="redirect_buttons">
-        <a href="/basic_results">Go to Results Page</a>
-        <a href="/scout_form">Scout a New Team</a>
+        <a href="/basic_results">Aller à la page des résultats</a>
+        <a href="/scout_form">Nouveau formulaire</a>
         <a href="/reports">Création de rapports</a>
     </div>
 

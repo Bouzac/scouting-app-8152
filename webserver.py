@@ -287,16 +287,6 @@ def compare_teams():
     values1 = [stats1['auto_points'], stats1['teleop_points'], stats1['endgame_points'], stats1['penalties']]
     values2 = [stats2['auto_points'], stats2['teleop_points'], stats2['endgame_points'], stats2['penalties']]
 
-    fig, ax = plt.subplots()
-    x = range(len(labels))
-    width = 0.35
-    ax.bar([i - width/2 for i in x], values1, width, label=f'Équipe {team1}')
-    ax.bar([i + width/2 for i in x], values2, width, label=f'Équipe {team2}')
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    ax.set_title('Comparaison des moyennes')
-    ax.legend()
-
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)

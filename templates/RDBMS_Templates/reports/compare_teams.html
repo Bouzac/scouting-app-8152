@@ -5,6 +5,7 @@
     <title>Comparaison Équipes {{ team1 }} vs {{ team2 }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style/report_styles/compare_teams.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/static/images/icon.png">
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -15,12 +16,26 @@
     <!-- DataTables JS -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <h1>Comparaison entre Équipe {{ team1 }} et Équipe {{ team2 }}</h1>
 
     <h2>Graphique des moyennes</h2>
-    <img src="data:image/png;base64,{{ photo_url }}" alt="Graphique comparatif" style="max-width:600px;" />
+    <canvas id="teamChart" width="400" height="200"></canvas>
+    <script id="chart-team1-data" type="application/json">
+    {
+        "labels": ["Auto", "Téléop", "Endgame"],
+        "data": [{{ auto_1_avg|round(1) }}, {{ teleop_1_avg|round(1) }}, {{ endgame_1_avg|round(1) }}]
+    }
+    </script>
+    <script id="chart-team2-data" type="application/json">
+    {
+        "labels": ["Auto", "Téléop", "Endgame"],
+        "data": [{{ auto_2_avg|round(1) }}, {{ teleop_2_avg|round(1) }}, {{ endgame_2_avg|round(1) }}]
+    }
+    </script>
 
     <div class="side-by-side">
         <div class="team-table">
