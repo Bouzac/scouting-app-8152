@@ -5,41 +5,43 @@
     <title>Page principales</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/static/images/icon.png">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/index.css') }}?v=1.0.1">
 </head>
 
 <body>
-    <div class="logo">
-        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo">
-    </div>
+    <div class="page_content">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo">
+        </div>
 
-    <h1>Bienvenue à l'Application de Scouting ESSC-8152</h1>
-    <p>vous êtes présentement sur la page principale.</p>
+        <h1>Bienvenue à l'Application de Scouting ESSC-8152</h1>
+        <p>vous êtes présentement sur la page principale.</p>
 
-    <div class="redirect_buttons">
-        <a href="/basic_results">Aller à la page des résultats</a>
-        <a href="/scout_form">Nouveau formulaire</a>
-        <a href="/reports">Création de rapports</a>
-    </div>
+        <div class="main-content">
+        <div class="redirect_buttons">
+            <a href="/basic_results">Aller à la page des résultats</a>
+            <a href="/scout_form">Nouveau formulaire</a>
+            <a href="/reports">Création de rapports</a>
+        </div>
 
-    <div class="ranking-board">
-        <table>
-            <thead>
-                <tr>
-                    <th>Équipe</th>
-                    <th>Points moyens</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for team in ranking %}
-                <tr>
-                    <td>{{ team.team_number }}</td>
-                    <td>{{ team.avg_points }}</td>
-
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="ranking-board">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Équipe</th>
+                        <th>Points moyens</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team in ranking %}
+                    <tr>
+                        <td>{{ team.team_number }}</td>
+                        <td>{{ team.avg_points }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="images">
