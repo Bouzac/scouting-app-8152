@@ -126,10 +126,22 @@ p {
         width: 80%;
     }
 
+    .images {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f5f5f5; /* même couleur que le fond, ou mets transparent */
+    text-align: center;
+    padding: 10px 0;
+    z-index: 1000;
+    }f
+
     .images img {
-        max-width: 90%;
-        height: auto;
-        margin: 10px 0;
+        max-height: 10%;
+        width: auto;
+        margin: 0 10px;
+        border-radius: 8px;
     }
 
     .ranking-board {

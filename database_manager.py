@@ -186,3 +186,18 @@ def get_ranking_data_by_wins():
 
     conn.close()
     return ranking_data
+
+def insert_match(match_number, teams_red, teams_blue, time):
+    if match_number is not None:
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        match_id = get_id_by_arg('match_id', 'matches', 'match_number', match_number)
+
+        cursor.execute("INSERT INTO match_alliances (match_id, alliance_color, team_id) VALUES (?, ?, ?)",(match_id, 'red', teams_red))
+        cursor.execute("INSERT INTO match_alliances (match_id, alliance_color, team_id) VALUES (?, ?, ?)",(match_id, 'blue', teams_blue))
+
+        cursor.execute("INSERT INTO matches (event_id, match_number) VALUES (?, ?)", (1, match_number))
+
+        conn.commit()
+        conn.close()

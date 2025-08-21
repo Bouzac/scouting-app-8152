@@ -6,10 +6,16 @@ import matplotlib.pyplot as plt
 import io
 import base64
 import constants
+import pytesseract
+import cv2
+from PIL import Image
+import csv
+import re
 import tables
 
 app = Flask(__name__)
 tables.init_tables()
+
 
 @app.route('/')
 def index():
@@ -300,8 +306,8 @@ def compare_teams():
         data2=df2.to_dict(orient='records'),
         columns=cols,
         current_sort=order_by,
-        reverse=reverse)
-
+        reverse=reverse
+    )
 
 @app.route('/compare_teams_form', methods=['GET', 'POST'])
 def compare_teams_form():
@@ -313,3 +319,52 @@ def compare_teams_form():
             return render_template('compare_teams_form.html', error=error)
         return redirect(url_for('compare_teams', team1=team1, team2=team2))
     return render_template('compare_teams_form.html')
+
+def insert_schedule(schedule_path):
+    img = cv2.imread(schedule_path)
+
+    img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+
+    custom_config = r'--oem 3 --psm 6'
+
+    text = pytesseract.image_to_string(thresh, config=custom_config, lang='eng')
+
+    lines = text.strip().split('\n')
+    lines = [line for line in lines if line.strip()]
+
+    data = []
+
+    for line in lines:
+        # Nettoyage des caractères OCR corrompus
+        line = re.sub(r'[¢+@_]', '', line)
+        line = re.sub(r'\s+', ' ', line).strip()
+
+        # Extraire le nom du match
+        match_match = re.search(r'(Qualification \d+)', line)
+        match_name = match_match.group(1) if match_match else None
+
+        # Extraire la date/heure (ex: "3/7 - 8:49 AM")
+        time_match = re.search(r'\d+/\d+\s*-\s*\d+:\d+\s+[AP]M', line)
+        start_time = time_match.group(0) if time_match else None
+
+        # Extraire les numéros d'équipe (6 de suite, 3 chiffres ou plus)
+        teams = re.findall(r'\b\d{3,4}\b', line)
+        if match_name and start_time and len(teams) >= 6:
+            data.append([match_name, start_time] + teams[:6])
+        
+        match_number = re.sub(r'Qualification (\d+)', r'\1', match_name) if match_name else None
+        print(match_number)
+
+        teams_red = teams[:3]
+        teams_blue = teams[3:6]
+        
+        db_m.insert_match(
+            match_number=match_number,
+            teams_red=teams_red,
+            teams_blue=teams_blue,
+            time=start_time
+        )
+
+insert_schedule('/home/zachary/scouting-app-8152/static/images/horaire frc 1-21.png')
