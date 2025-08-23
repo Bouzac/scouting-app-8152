@@ -89,6 +89,11 @@ p {
     color: #555;
 }
 
+.options {
+    text-align: center;
+    margin: 20px 0;
+}
+
 /* Redirect buttons */
 .redirect_buttons {
     text-align: center;

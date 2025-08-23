@@ -383,7 +383,9 @@ def upload_schedule():
 
 @app.route('/page_admin')
 def page_admin():
-    return render_template('login.html')
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    return render_template('page_admin.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -393,8 +395,13 @@ def login():
 
         if email in users and users[email] == password:
             session['user'] = email
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('page_admin'))
         else:
             flash("Identifiants incorrects")
 
     return render_template('login.html')
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.clear()
+    return ('', 204)
