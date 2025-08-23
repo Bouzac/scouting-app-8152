@@ -72,12 +72,15 @@ def match_alliances_table():
         'match_alliance_id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
         'match_id': 'INTEGER',
         'alliance_color': 'TEXT CHECK(alliance_color IN (\'red\', \'blue\'))',
-        'team_id': 'INTEGER',
-        
+        'team_1_id': 'INTEGER',
+        'team_2_id': 'INTEGER',
+        'team_3_id': 'INTEGER'
     }, {
-        'UNIQUE(match_id, team_id)',
+        'UNIQUE(match_id, alliance_color)',
         'FOREIGN KEY (match_id) REFERENCES matches(match_id) ON DELETE CASCADE',
-        'FOREIGN KEY (team_id) REFERENCES teams(team_id)'
+        'FOREIGN KEY (team_1_id) REFERENCES teams(team_id)',
+        'FOREIGN KEY (team_2_id) REFERENCES teams(team_id)',
+        'FOREIGN KEY (team_3_id) REFERENCES teams(team_id)'
     })
 
 def init_tables():

@@ -9,6 +9,13 @@
 </head>
 
 <body>
+    <div class="menu-container">
+        <button class="menu-button" onclick="toggleMenu()">☰ Menu</button>
+        <div class="dropdown-menu" id="dropdown">
+            <a href="/page_admin">Connexion Admin</a>
+        </div>
+    </div>
+
     <div class="page_content">
         <div class="logo">
             <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="logo">
@@ -49,4 +56,21 @@
         <img src="{{ url_for('static', filename='images/crescendo_monalisa.jpg') }}" alt="crescendo_monalisa">
     </div>
 </body>
+
+<script>
+    const menu = document.getElementById('dropdown');
+
+    function toggleMenu() {
+        menu.classList.toggle('open');
+    }
+
+    // Ferme le menu si on clique ailleurs
+    document.addEventListener('click', function(event) {
+        const button = document.querySelector('.menu-button');
+        if (!button.contains(event.target) && !menu.contains(event.target)) {
+            menu.classList.remove('open');
+        }
+    });
+</script>
+
 </html>

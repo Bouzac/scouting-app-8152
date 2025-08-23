@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Flask, jsonify, redirect, render_template, request, Response, url_for
+from flask import Flask, jsonify, redirect, render_template, request, Response, url_for, flash
 import database_manager as db_m
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,13 +9,20 @@ import constants
 import pytesseract
 import cv2
 from PIL import Image
-import csv
+import os
 import re
 import tables
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
 tables.init_tables()
 
+users = {
+    os.getenv("ADMIN_EMAIL"): os.getenv("ADMIN_PASSWORD")
+}
 
 @app.route('/')
 def index():
@@ -26,7 +33,6 @@ def index():
 def scout_form():
     if request.method == 'POST':
         all_cols = constants.all_scouting_data_columns
-        print(request.form.get('scout_name'))
         values = [
             request.form.get('scout_data_id'),
             db_m.get_id_by_arg(table='scouts', param='initials', arg=request.form.get('scout_name').lower(), id_type='scout_id'),
@@ -40,7 +46,6 @@ def scout_form():
             request.form.get('notes'),
             datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         ]
-        print(f'Inserting values: {values}')
         db_m.insert_data('scouting_data', all_cols, values)
 
         return redirect('/basic_results')
@@ -111,13 +116,10 @@ def get_scouting_details(scout_data_id):
         cols=columns,
         limit=1
     )
-    for r in row:
-        print(r[1])
 
     if row:
         row = row[0]
         data = dict(row)
-        print(data)
         return jsonify(data)
     else:
         return jsonify({"error": "Not found"}), 404
@@ -355,11 +357,11 @@ def insert_schedule(schedule_path):
             data.append([match_name, start_time] + teams[:6])
         
         match_number = re.sub(r'Qualification (\d+)', r'\1', match_name) if match_name else None
-        print(match_number)
+
 
         teams_red = teams[:3]
         teams_blue = teams[3:6]
-        
+
         db_m.insert_match(
             match_number=match_number,
             teams_red=teams_red,
@@ -367,4 +369,32 @@ def insert_schedule(schedule_path):
             time=start_time
         )
 
-insert_schedule('/home/zachary/scouting-app-8152/static/images/horaire frc 1-21.png')
+@app.route('/upload_schedule', methods=['GET', 'POST'])
+def upload_schedule():
+    if request.method == 'POST':
+        schedule_files = request.files.getlist('schedule_files[]')
+        if schedule_files:
+            for schedule_file in schedule_files:
+                schedule_path = f"static/uploads/{schedule_file.filename}"
+                schedule_file.save(schedule_path)
+                insert_schedule(schedule_path)
+            return redirect(url_for('index'))
+    return render_template('upload_schedule.html')
+
+@app.route('/page_admin')
+def page_admin():
+    return render_template('login.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+
+        if email in users and users[email] == password:
+            session['user'] = email
+            return redirect(url_for('dashboard'))
+        else:
+            flash("Identifiants incorrects")
+
+    return render_template('login.html')

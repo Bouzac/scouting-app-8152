@@ -1,4 +1,56 @@
-/* RESET */
+.menu-container {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+/* Bouton principal */
+.menu-button {
+    padding: 10px 15px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Menu déroulant caché par défaut */
+.dropdown-menu {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-menu.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Style des boutons du menu */
+.dropdown-menu button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: white;
+    text-align: left;
+    cursor: pointer;
+}
+
+.dropdown-menu button:hover {
+    background-color: #f0f0f0;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -27,7 +79,7 @@ body {
 }
 
 /* Heading & Text */
-h1, p {
+h1, h2, p {
     text-align: center;
     color: #222;
     margin: 10px 0;

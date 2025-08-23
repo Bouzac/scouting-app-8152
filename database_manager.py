@@ -19,7 +19,6 @@ def insert_data(table, args, data):
         placeholders = ', '.join(['?'] * len(args))
         query = f'INSERT INTO {table} ({", ".join(args)}) VALUES ({placeholders})'
         cursor.execute(query, data)
-        print(f'Inserted data into {table}: {data}')
 
     conn.commit()
     conn.close()
@@ -47,7 +46,6 @@ def get_recent_data(table, table_id, columns, limit=10):
 
     query += f' ORDER BY {table}.{table_id} DESC'
     
-    print(query)
     cursor.execute(query)
     rows = cursor.fetchmany(limit)
     conn.close()
@@ -57,7 +55,6 @@ def search_data(base_table, search_type=None, search_query=None, operator="=", c
     conn = get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    print(cols)
 
     query = 'SELECT {} FROM {}'.format(', '.join(cols), base_table)
 
@@ -70,11 +67,9 @@ def search_data(base_table, search_type=None, search_query=None, operator="=", c
 
     if search_type != None and search_query != None:
         query += f" WHERE {search_type} {operator} ?"
-        print(query, (search_query,))
         cursor.execute(query, (search_query,))
     else:
         query += " WHERE {}".format(' AND '.join([f"{col}" for col in cols]))
-        print(query)
         cursor.execute(query)
     rows = cursor.fetchmany(limit)
     conn.close()
@@ -91,7 +86,6 @@ def create_table(table_name, columns, special_args=None):
     query = f'CREATE TABLE IF NOT EXISTS {table_name} ({", ".join(column_defs)});'
 
     cursor.execute(query)
-    print(f'Creating table {table_name} with query: {query}')
     conn.commit()
     conn.close()
 
@@ -188,16 +182,29 @@ def get_ranking_data_by_wins():
     return ranking_data
 
 def insert_match(match_number, teams_red, teams_blue, time):
-    if match_number is not None:
+    if match_number is not None and teams_red and teams_blue:
         conn = get_connection()
         cursor = conn.cursor()
 
+        cursor.execute("SELECT COUNT(*) FROM matches WHERE match_number = ?", (match_number,))
+        matches = cursor.fetchone()
+
+        if matches[0] > 0:
+            conn.commit()
+            conn.close()
+            return
+
+        cursor.execute("INSERT INTO matches (event_id, match_number, scheduled_time) VALUES (?, ?, ?)", (1, match_number, time))
+
+        conn.commit()
+
         match_id = get_id_by_arg('match_id', 'matches', 'match_number', match_number)
 
-        cursor.execute("INSERT INTO match_alliances (match_id, alliance_color, team_id) VALUES (?, ?, ?)",(match_id, 'red', teams_red))
-        cursor.execute("INSERT INTO match_alliances (match_id, alliance_color, team_id) VALUES (?, ?, ?)",(match_id, 'blue', teams_blue))
+        r_team_ids = [get_id_by_arg('team_id', 'teams', 'team_number', team) for team in teams_red]
+        b_team_ids = [get_id_by_arg('team_id', 'teams', 'team_number', team) for team in teams_blue]
 
-        cursor.execute("INSERT INTO matches (event_id, match_number) VALUES (?, ?)", (1, match_number))
-
+        cursor.execute("INSERT INTO match_alliances (match_id, alliance_color, team_1_id, team_2_id, team_3_id) VALUES (?, ?, ?, ?, ?)",(match_id, 'red', r_team_ids[0], r_team_ids[1], r_team_ids[2]))
+        cursor.execute("INSERT INTO match_alliances (match_id, alliance_color, team_1_id, team_2_id, team_3_id) VALUES (?, ?, ?, ?, ?)",(match_id, 'blue', b_team_ids[0], b_team_ids[1], b_team_ids[2]))
+        
         conn.commit()
         conn.close()
