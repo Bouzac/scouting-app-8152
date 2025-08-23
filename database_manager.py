@@ -208,3 +208,46 @@ def insert_match(match_number, teams_red, teams_blue, time):
         
         conn.commit()
         conn.close()
+
+def get_match_info(match_number):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   SELECT a.team_1_id, a.team_2_id, a.team_3_id FROM matches AS m
+                   JOIN match_alliances AS a ON m.match_id = a.match_id
+                   WHERE m.match_number = ?
+                   """, (match_number,))
+    rows = cursor.fetchall()
+
+    team_ids_red = rows[1]
+    team_ids_blue = rows[0]
+
+    teams_red = [get_arg_by_id('team_id', 'teams', 'team_number', team_id) for team_id in team_ids_red]
+    teams_blue = [get_arg_by_id('team_id', 'teams', 'team_number', team_id) for team_id in team_ids_blue]
+
+    print(teams_red, teams_blue)
+
+    conn.close()
+    return {
+        'red': teams_red,
+        'blue': teams_blue
+    }
+
+def get_team_color(team_number, match_number):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+                   SELECT a.alliance_color FROM teams AS t
+                   JOIN match_alliances AS a ON t.team_id IN (a.team_1_id, a.team_2_id, a.team_3_id)
+                   JOIN matches AS m ON a.match_id = m.match_id
+                   WHERE t.team_number = ?
+                   AND m.match_number = ?
+                   """, (team_number, match_number))
+    row = cursor.fetchone()
+
+    conn.close()
+    if row:
+        return {'color': row[0]}
+    return None

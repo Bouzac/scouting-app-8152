@@ -8,7 +8,6 @@ import base64
 import constants
 import pytesseract
 import cv2
-from PIL import Image
 import os
 import re
 import tables
@@ -19,6 +18,8 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 tables.init_tables()
+
+selected_teams = [] # Pour que les scouts sachent quelles équipes ont déjà été sélectionnés
 
 users = {
     os.getenv("ADMIN_EMAIL"): os.getenv("ADMIN_PASSWORD")
@@ -405,3 +406,103 @@ def login():
 def logout():
     session.clear()
     return ('', 204)
+
+@app.route('/get_match_info/<int:match_number>', methods=['GET'])
+def get_match_info(match_number):
+    match_info = db_m.get_match_info(match_number)
+    teams = []
+    for team in selected_teams:
+        teams.append(db_m.get_arg_by_id(
+            param='team_number',
+            table='teams',
+            id_type='team_id',
+            arg=team['team_id']
+        ))
+
+    selected = []
+    for sel in selected_teams:
+        team_number = db_m.get_arg_by_id(arg=sel['team_id'], table='teams', id_type='team_id', param='team_number')
+        selected.append({
+            'team_number': team_number,
+            'user': sel['user']
+        })
+
+    match_info['selected'] = selected
+    
+    if match_info:
+        return jsonify(match_info)
+    return jsonify({'error': 'Match not found'}), 404
+
+@app.route('/get_team_color/<int:team_number>$<int:match_number>', methods=['GET'])
+def get_team_colors(team_number, match_number):
+    color = db_m.get_team_color(team_number, match_number)
+    if color:
+        return jsonify(color)
+    return jsonify({'error': 'Team not found'}), 404
+
+@app.route('/select', methods=['POST'])
+def select():
+    data = request.json
+    team_number = data.get('team_number')
+    user = data.get('user')
+    if team_number and user:
+        team_id = db_m.get_id_by_arg(id_type='team_id', table='teams', param='team_number', arg=team_number)
+        selected_teams.append({'team_id':team_id, 'user':user})
+        print(selected_teams)
+    return jsonify({'status': 'ok', 'selected': list(selected_teams)})
+
+@app.route('/rem_selected', methods=['POST'])
+def remove_selected():
+    data = request.json
+    team_number = data.get('team_number')
+
+    team_id = db_m.get_id_by_arg(
+        id_type='team_id',
+        table='teams',
+        param='team_number',
+        arg=team_number
+    )
+
+    global selected_teams
+    selected_teams = [
+        team for team in selected_teams if team['team_id'] != team_id
+    ]
+
+    return jsonify({'status': 'ok', 'selected': selected_teams})
+
+@app.route('/get_selected')
+def get_selected():
+    results = []
+    for entry in selected_teams:
+        team_number = db_m.get_arg_by_id(
+            param='team_number',
+            table='teams',
+            id_type='team_id',
+            arg=entry['team_id']
+        )
+        results.append({
+            'team_number': team_number,
+            'user': entry['user']
+        })
+
+    return jsonify({'selected': results})
+
+@app.route('/deselect', methods=['POST', 'GET'])
+def deselect():
+    print("deselection")
+    data = request.get_json()
+    team_number = data.get('team_number')
+    
+    team_id = db_m.get_id_by_arg(
+        id_type='team_id',
+        table='teams',
+        param='team_number',
+        arg=team_number
+    )
+
+    global selected_teams
+    selected_teams = [
+        team for team in selected_teams if team['team_id'] != team_id
+    ]
+
+    return '', 204

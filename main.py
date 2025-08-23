@@ -1,4 +1,6 @@
+# -----------------------------------------------------
+# NE PAS MODIFIER SAUF SI VOUS SAVEZ CE QUE VOUS FAITES
+# -----------------------------------------------------
 import webserver
-import tables
 
-webserver.app.run(host='0.0.0.0', port=5000, debug=True) #à faire marcher en dernier
+webserver.app.run(host='0.0.0.0', port=5000, debug=True)
