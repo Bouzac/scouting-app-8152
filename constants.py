@@ -24,5 +24,7 @@ all_matches_columns = ['match_id', 'event_id', 'match_number', 'scheduled_time']
 all_match_alliances_columns = ['match_alliance_id', 'match_id', 'alliance_color', 'team_id']
 all_teams_columns = ['team_id', 'team_number', 'team_name', 'robot_drive_type', 'notes']
 
+STREAM_PATH = 'https://www.youtube.com/watch?v=21mEnSvQhDA'
+
 DATABASE_PATH = 'scouting_app.db'
 IN_MEMORY_DB = False #For debugging only

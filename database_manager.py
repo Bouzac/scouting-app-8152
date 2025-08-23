@@ -4,7 +4,7 @@ import constants
 DB_NAME = ':memory:' if constants.IN_MEMORY_DB else 'scouting_app.db'
 
 def get_connection():
-    conn=sqlite3.connect(DB_NAME, check_same_thread=False)
+    conn=sqlite3.connect(DB_NAME)
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 

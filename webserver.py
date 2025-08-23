@@ -380,7 +380,7 @@ def upload_schedule():
                 schedule_file.save(schedule_path)
                 insert_schedule(schedule_path)
             return redirect(url_for('index'))
-    return render_template('upload_schedule.html')
+    return render_template('upload.html', type='schedule', f_name='upload_schedule')
 
 @app.route('/page_admin')
 def page_admin():
@@ -506,3 +506,33 @@ def deselect():
     ]
 
     return '', 204
+
+@app.route('/upload_match_data/', methods=['POST','GET'])
+def upload_match_data():
+    if request.method == 'POST':
+        matchFiles = request.files.getlist('matchFiles[]')
+        if matchFiles:
+            for match in matchFiles:
+                match_path = f"static/uploads/matches/{match.filename}"
+                match.save(match_path)
+                insert_match(match_path)
+            return redirect(url_for('index'))
+    return render_template('upload.html', type='Données de matchs', f_name='upload_match_data')
+
+def insert_match(matchPath):
+    img = cv2.imread(matchPath)
+
+    img = cv2.resize(img, None, fx=2, fy=2, interpolation=cv2.INTER_CUBIC)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+
+    custom_config = r'--oem 3 --psm 6'
+
+    text = pytesseract.image_to_string(thresh, config=custom_config, lang='eng')
+
+    lines = text.strip().split('\n')
+    lines = [line for line in lines if line.strip()]
+
+    data = []
+    for line in lines:
+        print(line)

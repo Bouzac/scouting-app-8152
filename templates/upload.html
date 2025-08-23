@@ -4,12 +4,12 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-        <title>Upload Schedule</title>
+        <title>Upload {{ type }}</title>
     </head>
     <body>
-        <h1>Upload Schedule</h1>
-        <form action="{{ url_for('upload_schedule') }}" method="post" enctype="multipart/form-data">
-            <input type="file" name="schedule_files[]" multiple accept="image/*">
+        <h1>Upload {{ type }}</h1>
+        <form action="{{ url_for(f_name) }}" method="post" enctype="multipart/form-data">
+            <input type="file" name="files[]" multiple accept="image/*">
             <button type="submit">Upload</button>
         </form>
     </body>
