@@ -251,3 +251,32 @@ def get_team_color(team_number, match_number):
     if row:
         return {'color': row[0]}
     return None
+
+def update_match(match_data):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    print("""
+                   UPDATE matches SET
+                   score_red = ?,
+                   score_blue = ?
+                   WHERE match_number = ?
+                   """, (
+       match_data.get("red_points", 0),
+       match_data.get("blue_points", 0),
+       match_data.get("match_number", 0)
+   ))
+
+    cursor.execute("""
+                   UPDATE matches SET
+                   score_red = ?,
+                   score_blue = ?
+                   WHERE match_number = ?
+                   """, (
+       match_data.get("red_points", 0),
+       match_data.get("blue_points", 0),
+       match_data.get("match_number", 0)
+   ))
+
+    conn.commit()
+    conn.close()

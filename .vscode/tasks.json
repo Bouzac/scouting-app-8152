@@ -6,7 +6,7 @@
         {
             "label": "execute",
             "type": "shell",
-            "command": "python3 main.py",
+            "command": ".venv/bin/python main.py",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
