@@ -59,7 +59,6 @@ def stream_video(url, target_pixel_pos=(367, 337), target_color=(255, 255, 255))
 
             frame = np.frombuffer(raw_frame, dtype=np.uint8).reshape((height, width, 3))
 
-            # Ignore detection if on cooldown
             if time.time() < cooldown_until:
                 continue
 
@@ -71,7 +70,6 @@ def stream_video(url, target_pixel_pos=(367, 337), target_color=(255, 255, 255))
                 db_m.update_match(match_data)
                 os.remove('temp/captured_frame.png')
                 cooldown_until = time.time() + 10
-
     finally:
         print('finit')
         process.terminate()
@@ -110,9 +108,7 @@ def preprocess_image(img, mode="auto"):
     if mode == "points":
         _, thresh = cv2.threshold(gray, 160, 255, cv2.THRESH_BINARY_INV)
     elif mode == "teams":
-        # Pour les numéros d'équipe, pas d'inversion, seuil plus bas
         _, thresh = cv2.threshold(gray, 180, 255, cv2.THRESH_BINARY)
-        # Agrandit l'image pour améliorer l'OCR
         thresh = cv2.resize(thresh, None, fx=2.5, fy=2.5, interpolation=cv2.INTER_CUBIC)
     else:
         blur = cv2.GaussianBlur(gray, (3, 3), 0)
@@ -123,12 +119,10 @@ def preprocess_image(img, mode="auto"):
     return thresh
 
 def ocr_image(img, whitelist=None):
-    # Teste psm 6 (bloc de texte) pour les équipes
     config = r'--oem 3 --psm 6'
     if whitelist:
         config += f' -c tessedit_char_whitelist={whitelist}'
     text = pytesseract.image_to_string(img, config=config, lang='fra')
-    # Nettoyage supplémentaire
     text = re.sub(r'[^\d\s]', ' ', text)
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
@@ -137,12 +131,10 @@ def clean_ocr(text, expect_team_numbers=False):
     text = text.replace('\n', ' ')
     print(f"OCR raw text: '{text}'")
     if expect_team_numbers:
-        # Garde tous les groupes de 3 ou 4 chiffres (numéros FRC)
         teams = re.findall(r'\b\d{3,4}\b', text)
         print(f"OCR cleaned teams: '{teams}'")
         return teams
     else:
-        # Pour les points, garde seulement le premier nombre
         points = re.findall(r'\d+', text)
         print(f"OCR cleaned points: '{points}'")
         return points[0] if points else ""
@@ -155,7 +147,7 @@ def process_match_data_frame(frame_path='temp/captured_frame.png', debug=True):
         os.makedirs("debug_zones")
 
     for zone in STREAM_COORDS:
-        # Choix du mode selon la zone
+        
         if "teams" in zone:
             mode = "teams"
         elif "points" in zone:

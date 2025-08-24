@@ -6,6 +6,7 @@ import constants as const
 
 from stream_listener import stream_video
 
+matches_url = const.MATCH_URLS_2025[:71]
 STREAM_URL = const.STREAM_URL
 
 # Thread qui exécute le stream

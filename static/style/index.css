@@ -5,6 +5,12 @@
     z-index: 1000;
 }
 
+.rankings {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
 /* Bouton principal */
 .menu-button {
     padding: 10px 15px;
@@ -126,9 +132,32 @@ p {
     overflow: hidden;
 }
 
+.ranking-win-board {
+    height: 300px;
+    width: 300px;
+    margin: 30px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow-y: auto;
+}
+
+.ranking-win-board table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
 .ranking-board table {
     width: 100%;
     border-collapse: collapse;
+}
+
+.ranking-win-board th {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px;
+    font-size: 1.1rem;
+    text-align: center;
 }
 
 .ranking-board th {
@@ -139,6 +168,13 @@ p {
     text-align: center;
 }
 
+.ranking-win-board td {
+    padding: 10px;
+    text-align: center;
+    font-size: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
 .ranking-board td {
     padding: 10px;
     text-align: center;
@@ -147,6 +183,10 @@ p {
 }
 
 .ranking-board tr:hover {
+    background-color: #f0f8ff;
+}
+
+.ranking-win-board tr:hover {
     background-color: #f0f8ff;
 }
 

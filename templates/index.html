@@ -30,24 +30,44 @@
             <a href="/scout_form">Nouveau formulaire</a>
             <a href="/reports">Création de rapports</a>
         </div>
-
-        <div class="ranking-board">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Équipe</th>
-                        <th>Points moyens</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for team in ranking %}
-                    <tr>
-                        <td>{{ team.team_number }}</td>
-                        <td>{{ team.avg_points }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="rankings">
+            <div class="ranking-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Équipe</th>
+                            <th>Points moyens</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team in ranking %}
+                        <tr>
+                            <td>{{ team.team_number }}</td>
+                            <td>{{ team.avg_points }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="ranking-win-board">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Équipe</th>
+                            <th>Victoires</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team in win_ranking %}
+                        <tr>
+                            <td>{{ team.team_number }}</td>
+                            <td>{{ team.win_count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

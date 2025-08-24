@@ -161,11 +161,11 @@ def get_ranking_data_by_wins():
     cursor = conn.cursor()
 
     query = """
-    SELECT t.team_number, COUNT(*) AS win_count
-    FROM match_results AS mr
-    JOIN teams AS t ON mr.winning_team_id = t.team_id
-    GROUP BY t.team_number
-    ORDER BY win_count DESC
+    select t.team_number, count(*) as win_count from matches as m 
+    join match_alliances as ma on ma.match_id = m.match_id and ma.alliance_color = m.winning_alliance 
+    join teams as t on t.team_id = team_1_id or team_2_id = team_id or team_id = team_3_id 
+    group by t.team_number
+    order by win_count desc
     """
 
     cursor.execute(query)
@@ -256,25 +256,26 @@ def update_match(match_data):
     conn = get_connection()
     cursor = conn.cursor()
 
-    print("""
-                   UPDATE matches SET
-                   score_red = ?,
-                   score_blue = ?
-                   WHERE match_number = ?
-                   """, (
-       match_data.get("red_points", 0),
-       match_data.get("blue_points", 0),
-       match_data.get("match_number", 0)
-   ))
+    red_score = int(match_data.get("red_points", 0))
+    blue_score = int(match_data.get("blue_points", 0))
+
+    print('red:'+str(red_score), 'blue:'+str(blue_score))  # DEBUG
+
+    winning_alliance = "blue"
+    if(red_score > blue_score):
+        winning_alliance = "red"
+    print(winning_alliance)
 
     cursor.execute("""
                    UPDATE matches SET
                    score_red = ?,
-                   score_blue = ?
+                   score_blue = ?,
+                   winning_alliance = ?
                    WHERE match_number = ?
                    """, (
-       match_data.get("red_points", 0),
-       match_data.get("blue_points", 0),
+       red_score,
+       blue_score,
+       winning_alliance,
        match_data.get("match_number", 0)
    ))
 

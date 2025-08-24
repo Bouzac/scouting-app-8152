@@ -12,6 +12,7 @@ import os
 import re
 from stream_listener import process_match_data_frame
 import tables
+from PIL import Image
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -29,7 +30,7 @@ users = {
 @app.route('/')
 def index():
     ranking = db_m.get_ranking_data_by_points()
-    return render_template('index.html', ranking=ranking)
+    return render_template('index.html', ranking=ranking, win_ranking=db_m.get_ranking_data_by_wins())
 
 @app.route('/scout_form', methods=['POST', 'GET'])
 def scout_form():
@@ -449,7 +450,6 @@ def select():
     if team_number and user:
         team_id = db_m.get_id_by_arg(id_type='team_id', table='teams', param='team_number', arg=team_number)
         selected_teams.append({'team_id':team_id, 'user':user})
-        print(selected_teams)
     return jsonify({'status': 'ok', 'selected': list(selected_teams)})
 
 @app.route('/rem_selected', methods=['POST'])
@@ -490,7 +490,6 @@ def get_selected():
 
 @app.route('/deselect', methods=['POST', 'GET'])
 def deselect():
-    print("deselection")
     data = request.get_json()
     team_number = data.get('team_number')
     
@@ -516,8 +515,10 @@ def upload_match_data():
             for match in matchFiles:
                 match_path = f"static/uploads/matches/{match.filename}"
                 match.save(match_path)
+                match = Image.open(match_path)
+                match = match.resize((1280,720), Image.LANCZOS)
+                os.remove(match_path)
+                match.save(match_path)
                 match_data = process_match_data_frame(match_path)
-                print(match_data)
                 db_m.update_match(match_data)
-            return redirect(url_for('index'))
     return render_template('upload.html', type='Données de matchs', f_name='upload_match_data')
