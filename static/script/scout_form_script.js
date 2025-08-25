@@ -154,13 +154,14 @@ function updateTeamsList() {
           console.log(team_id)
           console.log(selectedValue)
 
-          checklist.value = selectedValue
+        
 
           console.log(checklist.value)
 
           checklist.appendChild(option);
         });
-
+        document.getElementById('team_number').value = selectedValue
+        checklist.value = selectedValue
         checklistcontainer.style.display = "block";
       })
       .catch(err => {

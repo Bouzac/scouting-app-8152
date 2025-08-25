@@ -24,7 +24,7 @@ all_matches_columns = ['match_id', 'event_id', 'match_number', 'scheduled_time']
 all_match_alliances_columns = ['match_alliance_id', 'match_id', 'alliance_color', 'team_id']
 all_teams_columns = ['team_id', 'team_number', 'team_name', 'robot_drive_type', 'notes']
 
-STREAM_ON = True
+STREAM_ON = False
 STREAM_URL = 'https://www.twitch.tv/bourzac'
 STREAM_COORDS = {
     'match_number': {'top_left': (454, 6), 'bottom_right': (846, 42)},

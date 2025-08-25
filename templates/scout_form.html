@@ -15,6 +15,8 @@
       <p>Numéro de match</p>
       <input type="number" id="match_number" name="match_number" required oninput="matchInput(event)">
 
+      <input hidden type="number" name="team_number" id="team_number" value="">
+
       <div id="teams_checklist_container" style="display: none;">
         <p>Numéro d'équipe</p>
         <select id="teams_checklist" onclick="updateTeamsList()" oninput="teamSelected(event)">
@@ -62,5 +64,5 @@
   </div>
   </form>
 </body>
-<script src="/static/script/scout_form_script.js"></script>
+<script src="/static/script/scout_form_script.js?v=1.0.6"></script>
 </html>

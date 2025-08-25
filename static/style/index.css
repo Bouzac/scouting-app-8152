@@ -232,16 +232,18 @@ p {
     text-align: center;
     padding: 10px 0;
     z-index: 1000;
-    }f
+    }
 
     .images img {
-        max-height: 10%;
+        max-height: 150px;
         width: auto;
         margin: 0 10px;
         border-radius: 8px;
     }
-
-    .ranking-board {
-        width: 90%;
+    /* .ranking-win-board {
+        width: 50%;
     }
+    .ranking-board {
+        width: 50%;
+    } */
 }
