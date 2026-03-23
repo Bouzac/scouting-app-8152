@@ -1,6 +1,4 @@
-from flask import Flask
 from threading import Thread
-import time
 import webserver
 import constants as const
 
