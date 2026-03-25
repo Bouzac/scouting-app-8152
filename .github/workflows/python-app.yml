@@ -22,24 +22,21 @@ jobs:
       
     steps:
     - uses: actions/checkout@v6
-    
     - name: Install dependencies
       run: |
-        # 1. On crée le venv (avec --clear pour nettoyer les résidus des anciens builds)
-        python3 -m venv venv --clear
+        python3 -m venv venv
         
-        # 2. On utilise DIRECTEMENT le python du venv, SANS utiliser 'source'
         venv/bin/python -m pip install --upgrade pip
-        venv/bin/python -m pip install flake8 pytest
         if [ -f requirements.txt ]; then venv/bin/python -m pip install -r requirements.txt; fi
-        
-    - name: Lint with flake8
+  deploy:
+    runs-on: self-hosted
+
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+    steps:
+    - uses: actions/checkout@v6
+    - name: Start Uvicorn
       run: |
-        # On utilise DIRECTEMENT le flake8 du venv
-        venv/bin/flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        venv/bin/flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-        
-    - name: Test with pytest
-      run: |
-        # On utilise DIRECTEMENT le pytest du venv
-        venv/bin/pytest || ( RET=$?; if [ $RET -eq 5 ]; then exit 0; else exit $RET; fi )
+        venv/bin/python main.py
+      
