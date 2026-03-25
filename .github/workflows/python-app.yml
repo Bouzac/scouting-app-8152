@@ -39,4 +39,5 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
+        source venv/bin/activate
         pytest || ( RET=$?; if [ $RET -eq 5 ]; then exit 0; else exit $RET; fi )
