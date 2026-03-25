@@ -33,4 +33,4 @@ jobs:
         # 2. Lancer le serveur en arrière-plan
         # L'astuce RUNNER_TRACKING_ID="" empêche GitHub Actions de tuer le serveur à la fin du job
         # nohup permet au processus de survivre à la fermeture du terminal
-        RUNNER_TRACKING_ID="" nohup venv/bin/python main.py > server.log 2>&1 &
+        RUNNER_TRACKING_ID="" nohup venv/bin/python gunicorn --bind 0.0.0.0:5000 main:main > server.log 2>&1 &
