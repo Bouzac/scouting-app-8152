@@ -25,7 +25,7 @@ jobs:
         venv/bin/python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then venv/bin/python -m pip install -r requirements.txt; fi
         
-    - name: Start Uvicorn
+    - name: Start Gunicorn
       run: |
         # 1. Tuer l'ancien serveur s'il est déjà en train de tourner (pour libérer le port)
         pkill -f "main.py" || true
@@ -33,4 +33,4 @@ jobs:
         # 2. Lancer le serveur en arrière-plan
         # L'astuce RUNNER_TRACKING_ID="" empêche GitHub Actions de tuer le serveur à la fin du job
         # nohup permet au processus de survivre à la fermeture du terminal
-        RUNNER_TRACKING_ID="" nohup venv/bin/python gunicorn --bind 0.0.0.0:5000 main:main > server.log 2>&1 &
+        RUNNER_TRACKING_ID="" nohup venv/bin/python main.py > server.log 2>&1 &
